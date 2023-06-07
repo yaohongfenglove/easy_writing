@@ -1,32 +1,62 @@
 {
-  "open_ai_api_key": "sk-xxx",
-  "open_ai_proxy_server_enable": false,
-  "open_ai_proxy_api_base": "http://xxx.xx.xxx/v1",
-  "open_ai_proxy_api_key": "xxx",
-  "open_ai_model": "gpt-3.5-turbo",
-  "session_max_tokens": 4096,
-  "open_ai_prompt": [
-    {
-      "role": "system",
-      "content": "你是个乐于助人的助手。"
+  "milvus": {
+    "debug": {
+      "host": "xxx",
+      "port": 19530,
+      "user": "xxx",
+      "passwd": "xxx"
+    },
+    "production": {
+      "host": "xxx",
+      "port": 19530,
+      "user": "xxx",
+      "passwd": "xxx"
     }
+  },
+  "mysql": {
+    "debug": {
+      "user": "xxx",
+      "password": "xxx",
+      "host": "xxx",
+      "port": 3306,
+      "database": "easy_writing",
+      "charset": "utf8mb4"
+    },
+    "production": {
+      "user": "xxx",
+      "password": "xxx",
+      "host": "xxx",
+      "port": 3306,
+      "database": "easy_writing",
+      "charset": "utf8mb4"
+    }
+  },
+  "openai": {
+    "open_ai_proxy": {
+      "enable": true,
+      "api_base": "https://xxx/v1",
+      "api_key": "xxx"
+    },
+    "api_key": "sk-xxx",
+    "open_ai_chat_model": "gpt-3.5-turbo",
+    "open_ai_embedding_model": "text-embedding-ada-002",
+    "openai_retry": {
+      "min_wait": 3,
+      "max_wait": 5,
+      "max_attempt_number": 3
+    },
+    "open_ai_system_prompt": [
+      {
+        "role": "system",
+        "content": "你是个乐于助人的助手。"
+      }
   ],
-  "bot": "openai",
-  "proxy_enable": true,
-  "proxy_host": "127.0.0.1",
-  "proxy_port": 10809,
-  "proxy_port_socket": 10808,
-  "mysql_user": "xxx",
-  "mysql_passwd": "xxx",
-  "mysql_host": "x.x.x.x",
-  "mysql_port": 3306,
-  "mysql_db": "xxx",
-  "mysql_charset": "utf8mb4",
-  "mysql_user_debug": "xxx",
-  "mysql_passwd_debug": "xxx",
-  "mysql_host_debug": "x.x.x.x",
-  "mysql_port_debug": 3306,
-  "mysql_db_debug": "xxx",
-  "mysql_charset_debug": "utf8mb4",
-  "query_house_price_top_k": 30
+    "persist_session": false
+  },
+  "local_proxy": {
+    "enable": true,
+    "host": "127.0.0.1",
+    "port": 10809,
+    "port_socket": 10808
+  }
 }

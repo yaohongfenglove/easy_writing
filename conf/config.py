@@ -5,41 +5,41 @@ from logging.handlers import RotatingFileHandler
 
 import pymysql as pymysql
 
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+
 DEBUG = True
-
-# 加载配置
-
-
-def read_file(path, encoding='utf-8'):
-    with open(path, mode='r', encoding=encoding) as f:
-        return f.read()
 
 
 def load_config():
     config_path = os.path.join(BASE_DIR, "conf/config.json")
     if not os.path.exists(config_path):
         raise Exception('配置文件不存在，请根据config-template.json模板创建config.json文件')
-    config_str = read_file(config_path)  # 将json字符串反序列化为dict类型
-    conf = json.loads(config_str)
+
+    with open(config_path, mode='r', encoding='utf-8') as f:
+        config_str = f.read()
+    conf = json.loads(config_str)  # 将json字符串反序列化为dict类型
     return conf
 
 
-# 数据库连接
+# 加载配置
 config = load_config()
+
+
+# 数据库连接
 if DEBUG:
     MYSQL_CONFIG = {
         "creator": pymysql,
         "maxconnections": 500,  # 连接池允许的最大连接数，0和None表示不限制连接数
         "blocking": True,  # 连接池中如果没有可用连接后，是否阻塞等待。True，等待；False，不等待然后报错
         "maxusage": None,  # 一个链接最多被重复使用的次数，None表示无限制
-        "host": config.get("mysql_host_debug"),
-        "port": config.get("mysql_port_debug"),
-        "user": config.get("mysql_user_debug"),
-        "password": config.get("mysql_passwd_debug"),
-        "database": config.get("mysql_db_debug"),
-        "charset": config.get("mysql_charset_debug")
+        "host": config["mysql"]["debug"]["host"],
+        "port": config["mysql"]["debug"]["port"],
+        "user": config["mysql"]["debug"]["user"],
+        "password": config["mysql"]["debug"]["password"],
+        "database": config["mysql"]["debug"]["database"],
+        "charset": config["mysql"]["debug"]["charset"]
     }
 else:
     MYSQL_CONFIG = {
@@ -47,16 +47,16 @@ else:
         "maxconnections": 500,  # 连接池允许的最大连接数，0和None表示不限制连接数
         "blocking": True,  # 连接池中如果没有可用连接后，是否阻塞等待。True，等待；False，不等待然后报错
         "maxusage": None,  # 一个链接最多被重复使用的次数，None表示无限制
-        "host": config.get("mysql_host"),
-        "port": config.get("mysql_port"),
-        "user": config.get("mysql_user"),
-        "password": config.get("mysql_passwd"),
-        "database": config.get("mysql_db"),
-        "charset": config.get("mysql_charset")
+        "host": config["mysql"]["production"]["host"],
+        "port": config["mysql"]["production"]["port"],
+        "user": config["mysql"]["production"]["user"],
+        "password": config["mysql"]["production"]["password"],
+        "database": config["mysql"]["production"]["database"],
+        "charset": config["mysql"]["production"]["charset"]
     }
 
-# 日志配置
 
+# 日志配置
 # 如果日志文件不存在，则创建
 log_dir_path = os.path.join(BASE_DIR, "logs")
 if not os.path.isdir(log_dir_path):

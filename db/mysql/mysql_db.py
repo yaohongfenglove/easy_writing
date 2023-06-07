@@ -2,13 +2,14 @@ import datetime
 import pymysql
 
 from dbutils.pooled_db import PooledDB
+
 from conf.config import logger, MYSQL_CONFIG
 
 
 class MysqlClient(object):
     __pool = None
 
-    def __int__(self, kwargs):
+    def __init__(self, kwargs):
         if not self.__pool:
             self.__class__.__pool = PooledDB(cursorclass=pymysql.cursors.DictCursor, **kwargs)
         self._conn = None
@@ -92,10 +93,11 @@ class MysqlClient(object):
 
 def main():
     conn = MysqlClient(MYSQL_CONFIG)
-    sql = 'SELECT * FROM article;'
+    sql = 'SELECT * FROM user LIMIT 2;'
     count, res = conn.fetchall(sql)
     logger.info(f"{count},{res}")
     conn.close()
+
 
 if __name__ == '__main__':
     main()
