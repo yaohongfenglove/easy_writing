@@ -1,0 +1,32 @@
+{
+  "open_ai_api_key": "sk-xxx",
+  "open_ai_proxy_server_enable": false,
+  "open_ai_proxy_api_base": "http://xxx.xx.xxx/v1",
+  "open_ai_proxy_api_key": "xxx",
+  "open_ai_model": "gpt-3.5-turbo",
+  "session_max_tokens": 4096,
+  "open_ai_prompt": [
+    {
+      "role": "system",
+      "content": "你是个乐于助人的助手。"
+    }
+  ],
+  "bot": "openai",
+  "proxy_enable": true,
+  "proxy_host": "127.0.0.1",
+  "proxy_port": 10809,
+  "proxy_port_socket": 10808,
+  "mysql_user": "xxx",
+  "mysql_passwd": "xxx",
+  "mysql_host": "x.x.x.x",
+  "mysql_port": 3306,
+  "mysql_db": "xxx",
+  "mysql_charset": "utf8mb4",
+  "mysql_user_debug": "xxx",
+  "mysql_passwd_debug": "xxx",
+  "mysql_host_debug": "x.x.x.x",
+  "mysql_port_debug": 3306,
+  "mysql_db_debug": "xxx",
+  "mysql_charset_debug": "utf8mb4",
+  "query_house_price_top_k": 30
+}
