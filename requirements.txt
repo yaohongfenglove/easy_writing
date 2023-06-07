@@ -1,2 +1,7 @@
 pymysql==1.0.3
 dbutils==3.0.3
+openai==0.27.8
+tenacity==8.2.2
+pymilvus==2.2.9
+fastapi==0.96.0
+uvicorn==0.22.0
