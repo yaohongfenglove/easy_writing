@@ -1,0 +1,2 @@
+pymysql==1.0.3
+dbutils==3.0.3
