@@ -21,3 +21,12 @@ class StatusCodeEnum(Enum):  # 错误码定义
     def errmsg(self):
         """获取状态码信息"""
         return self.value[1]
+
+
+# 任务状态
+TASK_STATUS = {
+    "waiting": 0,
+    "doing": 1,
+    "success": 2,
+    "failed": 3,
+}
