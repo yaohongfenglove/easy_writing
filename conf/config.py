@@ -27,7 +27,7 @@ def load_config():
 config = load_config()
 
 
-# 数据库连接
+# MYSQL数据库连接
 if DEBUG:
     MYSQL_CONFIG = {
         "creator": pymysql,
@@ -55,6 +55,21 @@ else:
         "charset": config["mysql"]["production"]["charset"]
     }
 
+# REDIS数据库连接
+if DEBUG:
+    REDIS_CONFIG = {
+        "host": config["redis"]["debug"]["host"],
+        "port": config["redis"]["debug"]["port"],
+        "user": config["redis"]["debug"]["user"],
+        "password": config["redis"]["debug"]["password"],
+    }
+else:
+    REDIS_CONFIG = {
+        "host": config["redis"]["production"]["host"],
+        "port": config["redis"]["production"]["port"],
+        "user": config["redis"]["production"]["user"],
+        "password": config["redis"]["production"]["password"],
+    }
 
 # 日志配置
 # 如果日志文件不存在，则创建
