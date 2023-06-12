@@ -9,18 +9,18 @@ router = APIRouter()
 
 
 router.add_api_route(
-    '/task',
-    task_api.get_task,
+    '/list/',
+    task_api.get_tasks,
     methods=['get'],
-    summary='获取任务信息',
-    description="通过任务id，获取任务信息"
+    summary='获取任务列表',
+    description="通过用户id，获取任务列表"
 )
 
+
 router.add_api_route(
-    '/task',
+    '/',
     task_api.create_task,
     methods=['post'],
     summary='创建任务',
     description="提交任务"
 )
-

@@ -5,6 +5,7 @@ from pymysql import DatabaseError
 
 from conf.config import MYSQL_CONFIG, logger
 from db.mysql.mysql_db import MysqlClient
+from utils.decorators import datetime_to_strftime
 from utils.exceptions import TaskCreateError
 
 
@@ -19,6 +20,7 @@ class TaskDAO(object):
         mysql_conn = MysqlClient(MYSQL_CONFIG)
         return mysql_conn
 
+    @datetime_to_strftime
     def get_tasks(self, user_id: int) -> List[Dict]:
         """
         获取特定用户的任务列表
@@ -32,7 +34,7 @@ class TaskDAO(object):
                    'FROM aigc_task '
                    'WHERE user_id = %s;')
             args = (user_id, )
-            tasks = mysql_conn.fetchall(sql, args=args)
+            _, tasks = mysql_conn.fetchall(sql, args=args)
         finally:
             if "mysql_conn" in dir():  # 判断连接是否成功创建，创建了才能执行close()
                 mysql_conn.close()
@@ -40,7 +42,7 @@ class TaskDAO(object):
         return tasks
 
     def create_task(self, user_id: int, city_id: int,
-                    src_content_ids: List[int], client_version: str = "1.0.0.0") -> int:
+                    src_content_ids: List[int], client_version: str) -> int:
         """
         创建任务
         :param user_id: 用户id
@@ -90,14 +92,14 @@ class TaskDAO(object):
 
 def main():
     # 1. 查询任务列表
-    # task_dao = TaskDAO()
-    # res = task_dao.get_tasks(user_id=1)
-    # print(f"{res}")
+    task_dao = TaskDAO()
+    res = task_dao.get_tasks(user_id=1)
+    print(f"{res}")
 
     # 2. 创建任务
-    task_dao = TaskDAO()
-    task_id = task_dao.create_task(user_id=1, city_id=12, src_content_ids=[100, 101])
-    print(f"{task_id}")
+    # task_dao = TaskDAO()
+    # task_id = task_dao.create_task(user_id=1, city_id=12, src_content_ids=[100, 101], client_version="1.0.0.0")
+    # print(f"{task_id}")
 
 
 if __name__ == '__main__':
