@@ -19,3 +19,28 @@ class CustomHTTPException(HTTPException):
         self.msg = msg
         self.sub_code = sub_code
         self.sub_msg = sub_msg
+
+
+class UserQueryError(Exception):
+    """ 用户查询错误 """
+
+
+class VerificationCodeError(Exception):
+    """ 验证码校验错误 """
+    ...
+
+
+class DecodePhoneNumberError(Exception):
+    """ 解码手机号错误 """
+    ...
+
+
+class UserRegisterError(Exception):
+    """ 用户注册错误 """
+    ...
+
+
+class RequestIsTooFrequentError(Exception):
+    """
+    请求过于频繁异常
+    """
