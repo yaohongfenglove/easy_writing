@@ -71,6 +71,10 @@ class MysqlClient(object):
         count = self.__execute(sql, args)
         return count
 
+    def executemany(self, sql, args=()):
+        count = self.__executemany(sql, args)
+        return count
+
     def commit(self):
         res = self._conn.commit()
         return res
@@ -81,7 +85,8 @@ class MysqlClient(object):
 
     def begin(self):
         """开启事务"""
-        self._conn.autocommit(0)
+        # self._conn.autocommit(0)
+        self._conn.begin()
 
     def end(self, option='commit'):
         """结束事务"""
