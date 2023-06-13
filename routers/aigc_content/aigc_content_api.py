@@ -4,6 +4,7 @@ import datetime
 
 from items.aigc_content import AigcContentRequest
 from items.response import GenericResponse
+from logic import aigc_content_logic
 
 
 def update_aigc_content(
@@ -17,7 +18,7 @@ def update_aigc_content(
     :return: 任务id
     """
 
-    # task_id = task_logic.create_task(**task.dict())
+    aigc_content_logic.update_content_info(content_id=content_id, **aigc_content.dict())
 
     return GenericResponse(
         now=int(datetime.datetime.now().timestamp()),
