@@ -83,5 +83,11 @@
       "VERIFICATION_CODE_EXPIRE_MINUTES" : 5,
       "VERIFICATION_CODE_SEND_FREQUENCY" : 1
     }
+  },
+"access_token": {
+  "SECRET_KEY" : "xxxxx",
+  "RSA_PRIVATE_KEY" : "xxxxx",
+  "ALGORITHM" : "xxx",
+  "EXPIRE_SECONDS" : 31536000
   }
 }
