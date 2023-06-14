@@ -7,10 +7,12 @@ class StatusCodeEnum(Enum):  # 错误码定义
     OK = (0, '成功')
     ERROR = (-1, '错误')
 
-    USER_NOT_FOUND = (4001, '未找到用户')
-    REQUEST_IS_TOO_FREQUENT = (4005, '请求过于频繁')
+    USER_NOT_FOUND = (40001, '未找到用户')
+    REQUEST_IS_TOO_FREQUENT = (40005, '请求过于频繁')
 
-    JSON_PARSE_ERR = (5001, 'JSON解析错误')
+    ACCESS_TOKEN_HAS_EXPIRED = (40101, '访问令牌已过期')
+
+    JSON_PARSE_ERR = (50001, 'JSON解析错误')
 
     @property
     def code(self):

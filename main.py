@@ -3,8 +3,11 @@
 import uvicorn
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
+from starlette.requests import Request
+from starlette.responses import JSONResponse
 
 from routers import api_router
+from utils.exceptions import CustomHTTPException
 
 try:
     from conf.config import DEBUG
@@ -46,6 +49,15 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+@app.exception_handler(CustomHTTPException)
+async def custom_exception_handler(request: Request, exc: CustomHTTPException):
+    """ 处理程序抛出的自定义异常 """
+    return JSONResponse(
+        status_code=exc.status_code,
+        content={"code": exc.code, "msg": exc.msg},
+    )
 
 
 @app.on_event('startup')

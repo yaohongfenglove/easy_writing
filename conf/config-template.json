@@ -58,5 +58,36 @@
     "host": "127.0.0.1",
     "port": 10809,
     "port_socket": 10808
+  },
+  "redis": {
+    "debug": {
+      "host": "xxx",
+      "port": 6379,
+      "user": "xxx",
+      "password": "xxx"
+    },
+    "production": {
+      "host": "xxx",
+      "port": 6379,
+      "user": "xxx",
+      "password": "xxx"
+    }
+  },
+  "tencent": {
+    "sms": {
+      "SECRET_ID" : "xxxxx",
+      "SECRET_KEY" : "xxxxx",
+      "SDK_APP_ID" : "xxxxx",
+      "SIGN_NAME" : "xxxxx",
+      "TEMPLATE_ID" : "xxxxx",
+      "VERIFICATION_CODE_EXPIRE_MINUTES" : 5,
+      "VERIFICATION_CODE_SEND_FREQUENCY" : 1
+    }
+  },
+"access_token": {
+  "SECRET_KEY" : "xxxxx",
+  "RSA_PRIVATE_KEY" : "xxxxx",
+  "ALGORITHM" : "xxx",
+  "EXPIRE_SECONDS" : 31536000
   }
 }

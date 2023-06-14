@@ -1,5 +1,6 @@
 from conf.config import MYSQL_CONFIG
 from db.mysql.mysql_db import MysqlClient
+from items.aigc_content import AigcContentRequest
 
 
 class AigcContentDAO(object):
@@ -32,6 +33,36 @@ class AigcContentDAO(object):
                 mysql_conn.close()
 
         return content_info
+
+    def update_content_info(self, content_id: int, **aigc_content: AigcContentRequest) -> int:
+        """
+        更新内容信息
+        :param content_id: 内容id
+        :return:
+        """
+        mysql_conn = self.get_mysql_conn()
+
+        try:
+            sql = 'UPDATE aigc_content SET '
+            args = list()
+
+            for key, value in aigc_content.items():
+                if value is not None:
+                    sql += f'{key} = %s, '
+                    args.append(value)
+
+            sql = sql[:-2]  # 去除末尾的逗号和空格
+
+            sql += ' WHERE content_id = %s;'
+            args.append(content_id)
+
+            count = mysql_conn.execute(sql, args)
+            mysql_conn.commit()
+
+            return count
+        finally:
+            if "mysql_conn" in dir():  # 判断连接是否成功创建，创建了才能执行close()
+                mysql_conn.close()
 
 
 def main():
