@@ -8,15 +8,15 @@ router = APIRouter()
 
 
 router.add_api_route(
-    '/src_content/list/',
+    '/list/',
     src_content_api.get_src_content_list,
     methods=['get'],
     summary='获取源内容列表',
-    description='通过城市id获取城市源内容列表'
+    description='通过限制条件获取源内容列表'
 )
 
 router.add_api_route(
-    '/src_content',
+    '/',
     src_content_api.get_src_content,
     methods=['get'],
     summary='获取源内容详情',
