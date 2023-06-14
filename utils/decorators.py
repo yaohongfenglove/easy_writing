@@ -25,6 +25,8 @@ def datetime_to_strftime(func):
                 result['update_time'] = result['update_time'].strftime('%Y-%m-%d %H:%M:%S')
             if 'publish_time' in result.keys():
                 result['publish_time'] = result['publish_time'].strftime('%Y-%m-%d %H:%M:%S')
+            if 'expire_time' in result.keys():
+                result['expire_time'] = result['expire_time'].strftime('%Y-%m-%d %H:%M:%S')
         return results
     return wrapper
 

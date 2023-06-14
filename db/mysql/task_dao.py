@@ -28,7 +28,7 @@ class TaskDAO(object):
         :return:
         """
         mysql_conn = self.get_mysql_conn()
-        tasks = dict()
+        tasks = list()
         try:
             sql = ('SELECT task_id, status, create_time '
                    'FROM aigc_task '

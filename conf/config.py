@@ -27,7 +27,7 @@ def load_config():
 config = load_config()
 
 
-# 数据库连接
+# MYSQL数据库连接
 if DEBUG:
     MYSQL_CONFIG = {
         "creator": pymysql,
@@ -41,6 +41,13 @@ if DEBUG:
         "database": config["mysql"]["debug"]["database"],
         "charset": config["mysql"]["debug"]["charset"]
     }
+
+    REDIS_CONFIG = {
+        "host": config["redis"]["debug"]["host"],
+        "port": config["redis"]["debug"]["port"],
+        "db": config["redis"]["debug"]["db"],
+        "password": config["redis"]["debug"]["password"],
+    }
 else:
     MYSQL_CONFIG = {
         "creator": pymysql,  # 使用链接数据库的模块
@@ -53,6 +60,13 @@ else:
         "password": config["mysql"]["production"]["password"],
         "database": config["mysql"]["production"]["database"],
         "charset": config["mysql"]["production"]["charset"]
+    }
+
+    REDIS_CONFIG = {
+        "host": config["redis"]["production"]["host"],
+        "port": config["redis"]["production"]["port"],
+        "db": config["redis"]["production"]["db"],
+        "password": config["redis"]["production"]["password"],
     }
 
 
