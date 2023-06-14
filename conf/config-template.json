@@ -51,7 +51,8 @@
         "content": "你是个乐于助人的助手。"
       }
   ],
-    "persist_session": false
+    "persist_session": false,
+    "tokens_use_per_article": 7000
   },
   "local_proxy": {
     "enable": true,

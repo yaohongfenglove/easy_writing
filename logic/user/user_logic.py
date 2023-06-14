@@ -70,7 +70,7 @@ class Verify(object):
         if DEBUG:
             verification_code = "123456"
             return verification_code
-        
+
         verification_code = random.randint(100300, 999998)
         return str(verification_code)
 
@@ -175,3 +175,37 @@ def get_user_info(access_token: str) -> Dict:
         raise UserQueryError("用户不存在")
 
     return user
+
+
+def get_user_extra_info(user_id: int) -> Dict:
+    """
+    获取用户其他额外信息
+    :param user_id: 用户id
+    :return:
+    """
+
+    user_server = UserService()
+    user_extra_info = user_server.get_user_extra_info(user_id=user_id)
+
+    city_list = user_extra_info.get("city_list")
+    api_key_list = user_extra_info.get("api_key_list")
+
+    token_left = 0
+    expire_time = None
+    for index, item in enumerate(api_key_list):
+        token_left += item.get("token_left")
+
+        # 以最早过期的key的过期时间，作为所有key的过期时间
+        if index == 0:
+            expire_time = item.get("expire_time")
+        else:
+            if datetime.datetime.strptime(item.get("expire_time"), '%Y-%m-%d %H:%M:%S') < datetime.datetime.strptime(expire_time, '%Y-%m-%d %H:%M:%S'):
+                expire_time = item.get("expire_time")
+
+    user_extra_info = {
+        "city_list": city_list,
+        "token_left": token_left,
+        "expire_time": expire_time,
+        "article_left": token_left // config["openai"]["tokens_use_per_article"]
+    }
+    return user_extra_info

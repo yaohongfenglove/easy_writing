@@ -85,24 +85,15 @@ def get_user_info(access_token: str = Header()):
     :return:
     """
     user = user_logic.get_user_info(access_token=access_token)
+    user_extra_info = user_logic.get_user_extra_info(user["user_id"])
     return GenericResponse(
         now=int(datetime.datetime.now().timestamp()),
         data={
             "user_id": user["user_id"],
-            "city_list": [
-                {
-                    "city_id": 12,
-                    "city_name": "深圳"
-                },
-                {
-                    "city_id": 10,
-                    "city_name": "北京"
-                }
-            ],
-            "token_left": 84,
-            "expire_time": "1974-07-24 15:35:02",
-            "access_key_id": 69,
-            "article_left": 92
+            "city_list": user_extra_info.get("city_list"),
+            "token_left": user_extra_info.get("token_left"),
+            "expire_time": user_extra_info.get("expire_time"),
+            "article_left": user_extra_info.get("article_left"),
         }
     )
 
