@@ -11,7 +11,7 @@ from tencentcloud.common.profile.client_profile import ClientProfile
 from tencentcloud.common.profile.http_profile import HttpProfile
 from tencentcloud.sms.v20210111 import sms_client, models
 
-from conf.config import logger, config
+from conf.config import logger, config, DEBUG
 
 
 def send_sms_verification_code(phone: str, verification_code: str, expire_minutes: int):
@@ -22,6 +22,8 @@ def send_sms_verification_code(phone: str, verification_code: str, expire_minute
     :param expire_minutes: 过期时间
     :return:
     """
+    if DEBUG:
+        return "123456"
     try:
         # 实例化一个认证对象，入参需要传入腾讯云账户secretId，secretKey，此处还需注意密钥对的保密
         # 密钥可前往https://console.cloud.tencent.com/cam/capi网站进行获取

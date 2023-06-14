@@ -1,4 +1,5 @@
 import traceback
+from typing import Dict
 
 from pymysql import DatabaseError
 
@@ -19,22 +20,21 @@ class UserDAO(object):
         mysql_conn = MysqlClient(MYSQL_CONFIG)
         return mysql_conn
 
-    def get_user(self) -> dict:
+    def get_user(self) -> Dict:
         """
-        根据用户名，获取用户信息
-        :return: User对象
+        根据手机号，获取用户信息
+        :return:
         """
-        # mysql_conn = self.get_mysql_conn()
-        # user = dict()
-        # try:
-        #     sql = ('SELECT user_id, role_id, city_id FROM user '
-        #            'WHERE phone = %s;')
-        #     args = (self.phone,)
-        #     user = mysql_conn.fetchone(sql, args=args)
-        # finally:
-        #     if "mysql_conn" in dir():  # 判断连接是否成功创建，创建了才能执行close()
-        #         mysql_conn.close()
-        user = {"user": 1, "phone": 18649930703}
+        mysql_conn = self.get_mysql_conn()
+        user = dict()
+        try:
+            sql = ('SELECT user_id, phone FROM user '
+                   'WHERE phone = %s;')
+            args = (self.phone, )
+            user = mysql_conn.fetchone(sql, args=args)
+        finally:
+            if "mysql_conn" in dir():  # 判断连接是否成功创建，创建了才能执行close()
+                mysql_conn.close()
 
         return user
 
