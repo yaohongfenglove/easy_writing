@@ -6,7 +6,7 @@ from jose import jwt
 from starlette.background import BackgroundTasks
 
 from api.tencent import send_sms_verification_code
-from conf.config import config
+from conf.config import config, DEBUG
 from db.redis_db import redis_pool
 from items.access_token import AccessTokenInfo
 from items.user import UserAccessToken
@@ -67,6 +67,10 @@ class Verify(object):
         生成验证码
         :return: 6为随机数字码
         """
+        if DEBUG:
+            verification_code = "123456"
+            return verification_code
+        
         verification_code = random.randint(100300, 999998)
         return str(verification_code)
 
