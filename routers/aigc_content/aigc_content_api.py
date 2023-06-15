@@ -24,3 +24,18 @@ def update_aigc_content(
         now=int(datetime.datetime.now().timestamp()),
         data={}
     )
+
+
+def get_aigc_content(content_id: int):
+    """
+    获取AIGC内容详情
+    :param content_id:
+    :return:
+    """
+    src_content = aigc_content_logic.get_src_content(content_id=content_id)
+    return GenericResponse(
+        now=int(datetime.datetime.now().timestamp()),
+        data={
+            "result": src_content
+        }
+    )
