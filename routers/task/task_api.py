@@ -56,5 +56,18 @@ def create_task(
     )
 
 
-def get_api_key(user_id: int):
-    """ 获取 """
+def get_task_base_info(task_id: int):
+    """
+    获取任务基础信息
+    :param task_id: 任务id
+    :return:
+    """
+    task_info = task_logic.get_task_base_info(task_id=task_id)
+
+    return GenericResponse(
+        now=int(datetime.datetime.now().timestamp()),
+        data={
+            "list": task_info,
+            "count": len(task_info)
+        }
+    )
