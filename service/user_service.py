@@ -29,3 +29,13 @@ class UserService(object):
         }
 
         return user_extra_info
+
+    def get_user_api_key_list(self, user_id: int) -> List[Dict]:
+        """
+        获取用户的api_key列表
+        :param user_id: 用户id
+        :return:
+        """
+        api_key_list = self._user_dao.get_user_api_key_list(user_id=user_id)
+
+        return api_key_list
