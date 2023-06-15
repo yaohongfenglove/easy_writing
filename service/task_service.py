@@ -45,6 +45,10 @@ class TaskService(object):
 
         return task_id
 
+    def update_task(self, task_id: int, status: int):
+        """ 更新任务状态 """
+        self._task_dao.update_task(task_id=task_id, status=status)
+
 
 def main():
     # 1. 查询任务列表

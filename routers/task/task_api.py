@@ -2,7 +2,7 @@
 
 import datetime
 
-from starlette import status
+from starlette import status as starlette_status
 
 from items.response import GenericResponse
 from items.task import TaskRequest
@@ -43,7 +43,7 @@ def create_task(
         res = task_logic.create_task(**task.dict())
     except NoApiKeysAvailableError:
         raise CustomHTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
+            status_code=starlette_status.HTTP_400_BAD_REQUEST,
             code=StatusCodeEnum.NO_API_KEYS_AVAILABLE_ERR.code,
             msg=StatusCodeEnum.NO_API_KEYS_AVAILABLE_ERR.errmsg,
         )
@@ -70,4 +70,23 @@ def get_task_base_info(task_id: int):
             "list": task_info,
             "count": len(task_info)
         }
+    )
+
+
+def update_task(
+        task_id: int,
+        status: int
+):
+    """
+    更新任务状态
+    :param task_id: 任务id
+    :param status: 任务状态值
+    :return: 任务id
+    """
+
+    task_logic.update_task(task_id=task_id, status=status)
+
+    return GenericResponse(
+        now=int(datetime.datetime.now().timestamp()),
+        data={}
     )

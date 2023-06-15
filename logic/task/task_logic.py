@@ -66,3 +66,14 @@ def get_task_base_info(task_id: int):
     task_info = task_service.get_task_base_info(task_id=task_id)
 
     return task_info
+
+
+def update_task(task_id: int, status: int):
+    """
+    更新任务状态
+    :param task_id: 任务id
+    :param status: 任务状态值
+    :return:
+    """
+    task_service = TaskService()
+    task_service.update_task(task_id=task_id, status=status)

@@ -33,3 +33,12 @@ router.add_api_route(
     summary='获取任务基础信息',
     description="通过任务id，获取任务基础信息"
 )
+
+
+router.add_api_route(
+    '/',
+    task_api.update_task,
+    methods=['put'],
+    summary='更新任务状态',
+    description="通过任务id，更新任务状态"
+)

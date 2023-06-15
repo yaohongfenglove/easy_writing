@@ -136,6 +136,28 @@ class TaskDAO(object):
             if "mysql_conn" in dir():  # 判断连接是否成功创建，创建了才能执行close()
                 mysql_conn.close()
 
+    def update_task(self, task_id: int, status: int) -> int:
+        """
+        更新任务状态
+        :param task_id: 任务id
+        :param status: 任务状态值
+        :return:
+        """
+        mysql_conn = self.get_mysql_conn()
+
+        try:
+            sql = ('UPDATE aigc_task SET status = %s '
+                   'WHERE task_id = %s;')
+            args = (status, task_id)
+
+            count = mysql_conn.execute(sql, args)
+            mysql_conn.commit()
+
+            return count
+        finally:
+            if "mysql_conn" in dir():  # 判断连接是否成功创建，创建了才能执行close()
+                mysql_conn.close()
+
 
 def main():
     # 1. 查询任务列表
