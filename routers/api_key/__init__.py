@@ -4,7 +4,9 @@ from fastapi import APIRouter
 
 from routers.api_key import api_key_api
 
+
 router = APIRouter()
+
 
 router.add_api_route(
     '/',

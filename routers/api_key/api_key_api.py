@@ -1,5 +1,4 @@
 import datetime
-from typing import Union
 
 from starlette import status
 
@@ -9,7 +8,7 @@ from utils.constants import StatusCodeEnum
 from utils.exceptions import CustomHTTPException, NoApiKeysAvailableError
 
 
-def get_api_key(access_token: Union[None, str] = None):
+def get_api_key(access_token: str):
     """
     获取api_key
     :param access_token: 访问令牌
@@ -27,6 +26,10 @@ def get_api_key(access_token: Union[None, str] = None):
     return GenericResponse(
         now=int(datetime.datetime.now().timestamp()),
         data={
-            "access_key": api_key
+            "result": {
+                "api_key": api_key.get("api_key"),
+                "api_base": api_key.get("api_base"),
+                "expire_time": api_key.get("expire_time"),
+            }
         }
     )

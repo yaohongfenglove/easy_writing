@@ -15,28 +15,28 @@ def get_api_key(access_token: str) -> Dict:
     """
     payload = jwt.decode(access_token, config['access_token']['SECRET_KEY'], algorithms=[config['access_token']['ALGORITHM']])
     user_id = payload.get("user_id")
+
     user_service = UserService()
-    user_extra_info = user_service.get_user_extra_info(user_id=user_id)
-    api_key_list = user_extra_info.get("api_key_list")
+    api_key_list = user_service.get_user_api_key_list(user_id=user_id)
+
     if not api_key_list:
         raise NoApiKeysAvailableError("无可用的api_key了")
+
     api_key = api_key_list[0].get("api_key")
     api_base = api_key_list[0].get("api_base")
+    expire_time = api_key_list[0].get("expire_time")
 
-    res_key = {
+    res = {
         "api_key": api_key,
-        "api_base": api_base
+        "api_base": api_base,
+        "expire_time": expire_time
     }
 
-    return res_key
+    return res
 
 
 def main():
-
-    res = get_api_key("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJ1c2VybmFtZSI"
-                      "6IjE1OTE1MzExNDUzIiwiZXhwIjoxNjk4MzExMjMxfQ.H_WEhTvEB8GVtbaa8UGPuorV"
-                      "z_Gr98bqdzxal28pJYc")
-    print(f"{res}")
+    pass
 
 
 if __name__ == '__main__':
