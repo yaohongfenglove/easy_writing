@@ -51,8 +51,6 @@ class SrcContentDAO(object):
         :return:
         """
         mysql_conn = self.get_mysql_conn()
-        src_content_list = list()
-        content_info = dict()
         args = list()
         try:
             sql = 'SELECT content_id,content_type_id, title, publish_time, source_web, source_link ' \
@@ -67,13 +65,12 @@ class SrcContentDAO(object):
                 sql += f' AND publish_time BETWEEN %s AND %s ;'
                 args.append(publish_start_time)
                 args.append(publish_end_time)
-            content_info = mysql_conn.fetchall(sql, args=args)
-            src_content_list.append(content_info)
+            _, content_info = mysql_conn.fetchall(sql, args=args)
         finally:
             if "mysql_conn" in dir():  # 判断连接是否成功创建，创建了才能执行close()
                 mysql_conn.close()
 
-        return src_content_list
+        return content_info
 
 
 def main():
