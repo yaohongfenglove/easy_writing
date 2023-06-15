@@ -5,7 +5,7 @@
 
 import datetime
 import functools
-from typing import List, Dict
+from typing import List, Dict, Union
 
 
 def datetime_to_strftime(func):
@@ -16,18 +16,15 @@ def datetime_to_strftime(func):
     :return:
     """
     @functools.wraps(func)
-    def wrapper(*args, **kwargs):
-        results: List[Dict] = func(*args, **kwargs)
+    def wrapper(*args, **kwargs) -> Union[List[Dict], Dict]:
+        results: Union[List[Dict], Dict] = func(*args, **kwargs)
+        if isinstance(results, dict):
+            results = [results]
         for result in results:
-            if 'create_time' in result.keys():
-                result['create_time'] = result['create_time'].strftime('%Y-%m-%d %H:%M:%S')
-            if 'update_time' in result.keys():
-                result['update_time'] = result['update_time'].strftime('%Y-%m-%d %H:%M:%S')
-            if 'publish_time' in result.keys():
-                result['publish_time'] = result['publish_time'].strftime('%Y-%m-%d %H:%M:%S')
-            if 'expire_time' in result.keys():
-                result['expire_time'] = result['expire_time'].strftime('%Y-%m-%d %H:%M:%S')
-        return results
+            for key in ['create_time', 'update_time', 'publish_time', 'expire_time']:
+                if key in result.keys():
+                    result[key] = result[key].strftime('%Y-%m-%d %H:%M:%S')
+        return results[0] if len(results) == 1 else results
     return wrapper
 
 
