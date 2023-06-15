@@ -1,11 +1,12 @@
 import datetime
+from typing import Union
 
 from items.response import GenericResponse
 from logic import src_content_logic
 
 
-def get_src_content_list(city_id: int, content_type_id=None,
-                         publish_start_time=None, publish_end_time=None):
+def get_src_content_list(city_id: int, content_type_id: Union[None, int] = None,
+                         publish_start_time: Union[None, str] = None, publish_end_time: Union[None, str] = None):
     """
     获取源内容列表
     :param city_id: 城市id

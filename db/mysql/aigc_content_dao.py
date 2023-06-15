@@ -23,7 +23,7 @@ class AigcContentDAO(object):
         mysql_conn = self.get_mysql_conn()
         content_info = dict()
         try:
-            sql = ('SELECT content_id, title, summary, keywords, content, word_count, originality '
+            sql = ('SELECT content_id, title, summary, keywords, content, word_count, originality, status '
                    'FROM aigc_content '
                    'WHERE content_id = %s;')
             args = (content_id,)
