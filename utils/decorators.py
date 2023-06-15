@@ -17,14 +17,21 @@ def datetime_to_strftime(func):
     """
     @functools.wraps(func)
     def wrapper(*args, **kwargs) -> Union[List[Dict], Dict]:
-        results: Union[List[Dict], Dict] = func(*args, **kwargs)
-        if isinstance(results, dict):
-            results = [results]
+        result: Union[List[Dict], Dict] = func(*args, **kwargs)
+
+        is_dict_type = isinstance(result, Dict)
+
+        if is_dict_type:
+            results = [result]
+        else:
+            results = result
+
         for result in results:
             for key in ['create_time', 'update_time', 'publish_time', 'expire_time']:
                 if key in result.keys():
                     result[key] = result[key].strftime('%Y-%m-%d %H:%M:%S')
-        return results[0] if len(results) == 1 else results
+
+        return results[0] if is_dict_type else results
     return wrapper
 
 
