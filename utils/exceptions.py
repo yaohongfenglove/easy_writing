@@ -37,3 +37,10 @@ class RequestIsTooFrequentError(Exception):
     请求过于频繁异常
     """
     ...
+
+
+class NoApiKeysAvailableError(Exception):
+    """
+    无可用的api_key了
+    """
+    ...
