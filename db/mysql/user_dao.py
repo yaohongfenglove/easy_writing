@@ -73,7 +73,8 @@ class UserDAO(object):
                    'FROM api_key '
                    'WHERE user_id = %s '
                    'AND token_left > 0 '
-                   'AND expire_time > NOW();')
+                   'AND expire_time > NOW() '
+                   'ORDER BY expire_time;')
             args = (user_id, )
             _, api_key_list = mysql_conn.fetchall(sql, args=args)
         finally:

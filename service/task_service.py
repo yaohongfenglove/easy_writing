@@ -19,6 +19,15 @@ class TaskService(object):
         tasks = self._task_dao.get_tasks(user_id=user_id)
         return tasks
 
+    def get_task(self, task_id: int) -> List[Dict]:
+        """
+        获取任务详情
+        :param task_id: 任务id
+        :return:
+        """
+        task_info = self._task_dao.get_task(task_id=task_id)
+        return task_info
+
     def create_task(self, user_id: int, city_id: int,
                     src_content_ids: List[int], client_version: str) -> int:
         """ 创建任务 """

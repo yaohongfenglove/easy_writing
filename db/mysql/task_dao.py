@@ -41,6 +41,31 @@ class TaskDAO(object):
 
         return tasks
 
+    @datetime_to_strftime
+    def get_task(self, task_id: int) -> List[Dict]:
+        """
+        获取任务详情
+        :param task_id: 任务id
+        :return:
+        """
+        mysql_conn = self.get_mysql_conn()
+        task_info = list()
+        try:
+            sql = ('SELECT ac.content_id, ac.status, ac.create_time, '
+                   'sc.title, sc.content, '
+                   'p.prompt '
+                   'FROM aigc_content ac '
+                   'JOIN aigc_task at ON ac.task_id = at.task_id AND ac.task_id = %s '
+                   'JOIN src_content sc ON ac.src_content_id = sc.content_id '
+                   'JOIN prompt p ON sc.content_type_id = p.content_type_id AND writing_type_id = 1;')
+            args = (task_id, )
+            _, task_info = mysql_conn.fetchall(sql, args=args)
+        finally:
+            if "mysql_conn" in dir():  # 判断连接是否成功创建，创建了才能执行close()
+                mysql_conn.close()
+
+        return task_info
+
     def create_task(self, user_id: int, city_id: int,
                     src_content_ids: List[int], client_version: str) -> int:
         """
@@ -92,14 +117,19 @@ class TaskDAO(object):
 
 def main():
     # 1. 查询任务列表
-    task_dao = TaskDAO()
-    res = task_dao.get_tasks(user_id=1)
-    print(f"{res}")
+    # task_dao = TaskDAO()
+    # res = task_dao.get_tasks(user_id=1)
+    # print(f"{res}")
 
     # 2. 创建任务
     # task_dao = TaskDAO()
     # task_id = task_dao.create_task(user_id=1, city_id=12, src_content_ids=[100, 101], client_version="1.0.0.0")
     # print(f"{task_id}")
+
+    # 3. 查询任务详情
+    task_dao = TaskDAO()
+    res = task_dao.get_task(task_id=1)
+    print(f"{res}")
 
 
 if __name__ == '__main__':

@@ -7,6 +7,7 @@ class StatusCodeEnum(Enum):  # 错误码定义
     OK = (0, '成功')
     ERROR = (-1, '错误')
 
+    NO_API_KEYS_AVAILABLE_ERR = (40003, '无可用的api_key了')
     VERIFICATION_CODE_ERR = (40004, '验证码错误')
     REQUEST_IS_TOO_FREQUENT = (40005, '请求过于频繁')
 
