@@ -14,7 +14,9 @@ def get_src_content_list(city_id: int, content_type_id=None,
     :return:
     """
     src_content_list_service = SrcContentService()
-    src_content_list = src_content_list_service.get_src_content_list(city_id=city_id)
+    src_content_list = src_content_list_service.get_src_content_list(city_id=city_id, content_type_id=content_type_id,
+                                                                     publish_start_time=publish_start_time,
+                                                                     publish_end_time=publish_end_time)
 
     return src_content_list
 

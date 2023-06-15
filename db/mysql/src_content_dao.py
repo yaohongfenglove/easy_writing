@@ -40,7 +40,6 @@ class SrcContentDAO(object):
 
         return content_info
 
-    @datetime_to_strftime
     def get_src_content_list(self, city_id: int, content_type_id=None,
                              publish_start_time=None, publish_end_time=None) -> List:
         """
@@ -65,11 +64,10 @@ class SrcContentDAO(object):
                 args.append(content_type_id)
             if publish_start_time is not None and publish_end_time is not None:
                 sql = sql[:-1]  # 去除末尾的分号
-                sql += f' and (publish_time ' \
-                       'BETWEEN CAST(publish_start_time AS DATETIME) and CAST(publish_end_time AS DATETIME)) ;'
+                sql += f' AND publish_time BETWEEN %s AND %s ;'
                 args.append(publish_start_time)
                 args.append(publish_end_time)
-            content_info = mysql_conn.fetchone(sql, args=args)
+            content_info = mysql_conn.fetchall(sql, args=args)
             src_content_list.append(content_info)
         finally:
             if "mysql_conn" in dir():  # 判断连接是否成功创建，创建了才能执行close()
@@ -80,7 +78,8 @@ class SrcContentDAO(object):
 
 def main():
     src_content_dao = SrcContentDAO()
-    res = src_content_dao.get_src_content_list(city_id=3)
+    res = src_content_dao.get_src_content_list(city_id=3,
+                                               content_type_id=1)
     print(f"{res}")
 
 

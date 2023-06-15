@@ -14,7 +14,9 @@ def get_src_content_list(city_id: int, content_type_id=None,
     :param publish_start_time: 内容发布的起始时间
     :return:
     """
-    src_content_list = src_content_logic.get_src_content_list(city_id=city_id)
+    src_content_list = src_content_logic.get_src_content_list(city_id=city_id, content_type_id=content_type_id,
+                                                              publish_start_time=publish_start_time,
+                                                              publish_end_time=publish_end_time)
     return GenericResponse(
         now=int(datetime.datetime.now().timestamp()),
         data={

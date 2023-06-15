@@ -20,7 +20,9 @@ class SrcContentService(object):
         :param publish_start_time: 内容发布的起始时间
         :return:
         """
-        src_content_list = self._src_content_dao.get_src_content_list(city_id=city_id)
+        src_content_list = self._src_content_dao.get_src_content_list(city_id=city_id, content_type_id=content_type_id,
+                                                                      publish_start_time=publish_start_time,
+                                                                      publish_end_time=publish_end_time)
 
         return src_content_list
 
@@ -32,4 +34,3 @@ class SrcContentService(object):
         """
         src_content = self._src_content_dao.get_content_info(content_id=content_id)
         return src_content
-
