@@ -10,8 +10,8 @@ class SrcContentService(object):
         self._src_content_dao = SrcContentDAO()
         super(SrcContentService, self).__init__(*args, **kwargs)
 
-    def get_src_content_list(self, city_id: int, content_type_id=None,
-                             publish_start_time=None, publish_end_time=None) -> List:
+    def get_src_content_list(self, city_id: int, content_type_id: int,
+                             publish_start_time: str, publish_end_time: str) -> List[Dict]:
         """
         获取源内容列表
         :param city_id: 城市id
