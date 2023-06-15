@@ -12,7 +12,7 @@ def update_aigc_content(
         aigc_content: AigcContentRequest
 ):
     """
-    创建任务
+    更新内容信息
     :param content_id: 内容id
     :param aigc_content: AIGC内容对象
     :return: 任务id

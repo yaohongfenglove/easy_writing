@@ -24,3 +24,21 @@ router.add_api_route(
     summary='创建任务',
     description="提交任务"
 )
+
+
+router.add_api_route(
+    '/',
+    task_api.get_task_base_info,
+    methods=['get'],
+    summary='获取任务基础信息',
+    description="通过任务id，获取任务基础信息"
+)
+
+
+router.add_api_route(
+    '/',
+    task_api.update_task,
+    methods=['put'],
+    summary='更新任务状态',
+    description="通过任务id，更新任务状态"
+)

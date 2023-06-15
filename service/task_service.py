@@ -19,13 +19,22 @@ class TaskService(object):
         tasks = self._task_dao.get_tasks(user_id=user_id)
         return tasks
 
-    def get_task(self, task_id: int) -> List[Dict]:
+    def get_task_pro_info(self, task_id: int) -> List[Dict]:
         """
-        获取任务详情
+        获取任务详细信息
         :param task_id: 任务id
         :return:
         """
-        task_info = self._task_dao.get_task(task_id=task_id)
+        task_info = self._task_dao.get_task_pro_info(task_id=task_id)
+        return task_info
+
+    def get_task_base_info(self, task_id: int) -> List[Dict]:
+        """
+        获取任务基础信息
+        :param task_id: 任务id
+        :return:
+        """
+        task_info = self._task_dao.get_task_base_info(task_id=task_id)
         return task_info
 
     def create_task(self, user_id: int, city_id: int,
@@ -35,6 +44,10 @@ class TaskService(object):
                                              src_content_ids=src_content_ids, client_version=client_version)
 
         return task_id
+
+    def update_task(self, task_id: int, status: int):
+        """ 更新任务状态 """
+        self._task_dao.update_task(task_id=task_id, status=status)
 
 
 def main():
