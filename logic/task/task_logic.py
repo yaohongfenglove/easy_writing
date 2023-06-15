@@ -42,7 +42,7 @@ def create_task(user_id: int, city_id: int,
     task_id = task_service.create_task(user_id=user_id, city_id=city_id,
                                        src_content_ids=src_content_ids, client_version=client_version)
     # 获取任务对应的详情列表
-    task_info = task_service.get_task(task_id=task_id)
+    task_info = task_service.get_task_pro_info(task_id=task_id)
 
     res = {
         "list": task_info,
@@ -53,3 +53,27 @@ def create_task(user_id: int, city_id: int,
     }
 
     return res
+
+
+def get_task_base_info(task_id: int):
+    """
+    获取任务基础信息
+    :param task_id: 任务id
+    :return:
+    """
+
+    task_service = TaskService()
+    task_info = task_service.get_task_base_info(task_id=task_id)
+
+    return task_info
+
+
+def update_task(task_id: int, status: int):
+    """
+    更新任务状态
+    :param task_id: 任务id
+    :param status: 任务状态值
+    :return:
+    """
+    task_service = TaskService()
+    task_service.update_task(task_id=task_id, status=status)
