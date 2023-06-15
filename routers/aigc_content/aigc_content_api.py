@@ -4,7 +4,7 @@ import datetime
 
 from items.aigc_content import AigcContentRequest
 from items.response import GenericResponse
-from logic import aigc_content_logic
+from logic.aigc_content import aigc_content_logic
 
 
 def update_aigc_content(

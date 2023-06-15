@@ -51,7 +51,8 @@
         "content": "你是个乐于助人的助手。"
       }
   ],
-    "persist_session": false
+    "persist_session": false,
+    "tokens_use_per_article": 7000
   },
   "local_proxy": {
     "enable": true,
@@ -61,15 +62,15 @@
   },
   "redis": {
     "debug": {
-      "host": "xxx",
+      "host": "127.0.0.1",
       "port": 6379,
-      "user": "xxx",
+      "db": 10,
       "password": "xxx"
     },
     "production": {
       "host": "xxx",
       "port": 6379,
-      "user": "xxx",
+      "db": 10,
       "password": "xxx"
     }
   },
@@ -84,10 +85,10 @@
       "VERIFICATION_CODE_SEND_FREQUENCY" : 1
     }
   },
-"access_token": {
-  "SECRET_KEY" : "xxxxx",
-  "RSA_PRIVATE_KEY" : "xxxxx",
-  "ALGORITHM" : "xxx",
-  "EXPIRE_SECONDS" : 31536000
+  "access_token": {
+    "SECRET_KEY" : "xxxxx",
+    "RSA_PRIVATE_KEY" : "xxxxx",
+    "ALGORITHM" : "xxx",
+    "EXPIRE_SECONDS" : 8640000
   }
 }

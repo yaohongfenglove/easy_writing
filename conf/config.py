@@ -41,6 +41,13 @@ if DEBUG:
         "database": config["mysql"]["debug"]["database"],
         "charset": config["mysql"]["debug"]["charset"]
     }
+
+    REDIS_CONFIG = {
+        "host": config["redis"]["debug"]["host"],
+        "port": config["redis"]["debug"]["port"],
+        "db": config["redis"]["debug"]["db"],
+        "password": config["redis"]["debug"]["password"],
+    }
 else:
     MYSQL_CONFIG = {
         "creator": pymysql,  # 使用链接数据库的模块
@@ -55,21 +62,13 @@ else:
         "charset": config["mysql"]["production"]["charset"]
     }
 
-# REDIS数据库连接
-if DEBUG:
-    REDIS_CONFIG = {
-        "host": config["redis"]["debug"]["host"],
-        "port": config["redis"]["debug"]["port"],
-        "user": config["redis"]["debug"]["user"],
-        "password": config["redis"]["debug"]["password"],
-    }
-else:
     REDIS_CONFIG = {
         "host": config["redis"]["production"]["host"],
         "port": config["redis"]["production"]["port"],
-        "user": config["redis"]["production"]["user"],
+        "db": config["redis"]["production"]["db"],
         "password": config["redis"]["production"]["password"],
     }
+
 
 # 日志配置
 # 如果日志文件不存在，则创建

@@ -12,6 +12,7 @@ class TaskCreateError(Exception):
 
 
 class CustomHTTPException(HTTPException):
+    """ 自定义http异常 """
     def __init__(self, status_code: int, detail: Any = None, headers: Optional[Dict[str, Any]] = None,
                  code: int = 0, msg: str = "", sub_code: int = 0, sub_msg: str = ""):
         super().__init__(status_code=status_code, detail=detail, headers=headers)
@@ -23,6 +24,7 @@ class CustomHTTPException(HTTPException):
 
 class UserQueryError(Exception):
     """ 用户查询错误 """
+    ...
 
 
 class VerificationCodeError(Exception):
@@ -30,17 +32,8 @@ class VerificationCodeError(Exception):
     ...
 
 
-class DecodePhoneNumberError(Exception):
-    """ 解码手机号错误 """
-    ...
-
-
-class UserRegisterError(Exception):
-    """ 用户注册错误 """
-    ...
-
-
 class RequestIsTooFrequentError(Exception):
     """
     请求过于频繁异常
     """
+    ...

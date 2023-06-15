@@ -6,7 +6,7 @@ from starlette.background import BackgroundTasks
 
 from items.response import GenericResponse
 from items.task import TaskRequest
-from logic import task_logic
+from logic.task import task_logic
 
 
 def get_tasks(
