@@ -92,7 +92,6 @@ def get_user_info(access_token: str = Header()):
             "user_id": user["user_id"],
             "city_list": user_extra_info.get("city_list"),
             "token_left": user_extra_info.get("token_left"),
-            "expire_time": user_extra_info.get("expire_time"),
             "article_left": user_extra_info.get("article_left"),
         }
     )

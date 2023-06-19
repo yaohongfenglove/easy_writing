@@ -150,7 +150,7 @@ def get_access_token(user: UserAccessToken, background_tasks: BackgroundTasks) -
     """
     获取访问令牌
     :param user: 用户对象
-        :param background_tasks: 后台任务
+    :param background_tasks: 后台任务
     :return:
     """
     verify_obj = Verify()
@@ -188,24 +188,11 @@ def get_user_extra_info(user_id: int) -> Dict:
     user_extra_info = user_server.get_user_extra_info(user_id=user_id)
 
     city_list = user_extra_info.get("city_list")
-    api_key_list = user_extra_info.get("api_key_list")
-
-    token_left = 0
-    expire_time = None
-    for index, item in enumerate(api_key_list):
-        token_left += item.get("token_left")
-
-        # 以最早过期的key的过期时间，作为所有key的过期时间
-        if index == 0:
-            expire_time = item.get("expire_time")
-        else:
-            if datetime.datetime.strptime(item.get("expire_time"), '%Y-%m-%d %H:%M:%S') < datetime.datetime.strptime(expire_time, '%Y-%m-%d %H:%M:%S'):
-                expire_time = item.get("expire_time")
+    user_token_left = user_extra_info.get("user_token_left")
 
     user_extra_info = {
         "city_list": city_list,
-        "token_left": token_left,
-        "expire_time": expire_time,
-        "article_left": token_left // config["openai"]["tokens_use_per_article"]
+        "token_left": user_token_left,
+        "article_left": int(user_token_left['token_left']) // config["openai"]["tokens_use_per_article"]
     }
     return user_extra_info
