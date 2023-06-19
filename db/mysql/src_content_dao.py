@@ -41,10 +41,19 @@ class SrcContentDAO(object):
         return content_info
 
     @datetime_to_strftime
-    def get_src_content_list(self, city_id: int, content_type_id: int,
-                             publish_start_time: str, publish_end_time: str) -> List[Dict]:
+    def get_src_content_list(
+            self,
+            city_id: int,
+            page: int,
+            page_size: int,
+            content_type_id: int,
+            publish_start_time: str,
+            publish_end_time: str
+    ) -> List[Dict]:
         """
         获取源内容列表
+        :param page_size: 每页多少条数据
+        :param page:  页码
         :param city_id: 城市id
         :param content_type_id: 内容类型id
         :param publish_end_time: 内容发布的截止时间
@@ -53,9 +62,8 @@ class SrcContentDAO(object):
         """
         mysql_conn = self.get_mysql_conn()
         content_list = list()
-
         try:
-            sql = ('SELECT content_id,content_type_id, title, publish_time, source_web, source_link '
+            sql = ('SELECT content_id, content_type_id, title, publish_time, source_web, source_link '
                    'FROM src_content '
                    'WHERE city_id = %s;')
             args = list()
@@ -70,6 +78,10 @@ class SrcContentDAO(object):
                 sql += ' AND publish_time BETWEEN %s AND %s;'
                 args.append(publish_start_time)
                 args.append(publish_end_time)
+            sql = sql[:-1]
+            sql += ' ORDER BY publish_time DESC LIMIT %s, %s;'
+            args.append((page - 1)*page_size)
+            args.append(page_size)
             _, content_list = mysql_conn.fetchall(sql, args=args)
         finally:
             if "mysql_conn" in dir():  # 判断连接是否成功创建，创建了才能执行close()
@@ -80,9 +92,14 @@ class SrcContentDAO(object):
 
 def main():
     src_content_dao = SrcContentDAO()
-    res = src_content_dao.get_src_content_list(city_id=12, content_type_id=2,
-                                               publish_start_time="2023-06-07 00:00:00",
-                                               publish_end_time="2023-06-15 10:45:35")
+    res = src_content_dao.get_src_content_list(
+        city_id=3,
+        page=1,
+        page_size=5,
+        content_type_id=2,
+        publish_start_time="2023-06-07 00:00:00",
+        publish_end_time="2023-06-15 10:45:35"
+    )
     print(f"{res}")
 
 
