@@ -58,8 +58,7 @@ class UserDAO(object):
 
         return city_list
 
-    @datetime_to_strftime
-    def get_user_token_left(self, user_id: int) -> Dict:
+    def get_user_token_left(self, user_id: int) -> int:
         """
         获取用户的token_left
         :param user_id: 用户id
@@ -73,11 +72,14 @@ class UserDAO(object):
                    'WHERE user_id = %s ')
             args = (user_id, )
             user_token_left = mysql_conn.fetchone(sql, args=args)
+            if user_token_left is None:
+                return None
+            token_left = user_token_left["token_left"]
         finally:
             if "mysql_conn" in dir():  # 判断连接是否成功创建，创建了才能执行close()
                 mysql_conn.close()
 
-        return user_token_left
+        return token_left
 
 
 def main():

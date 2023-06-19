@@ -193,6 +193,6 @@ def get_user_extra_info(user_id: int) -> Dict:
     user_extra_info = {
         "city_list": city_list,
         "token_left": user_token_left,
-        "article_left": int(user_token_left['token_left']) // config["openai"]["tokens_use_per_article"]
+        "article_left": user_token_left // config["openai"]["tokens_use_per_article"]
     }
     return user_extra_info

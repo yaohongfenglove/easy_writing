@@ -29,7 +29,7 @@ class UserService(object):
 
         return user_extra_info
 
-    def get_user_token_left(self, user_id: int) -> List[Dict]:
+    def get_user_token_left(self, user_id: int) -> int:
         """
         获取用户的api_key列表
         :param user_id: 用户id
