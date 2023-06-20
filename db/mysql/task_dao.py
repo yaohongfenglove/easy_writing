@@ -53,7 +53,7 @@ class TaskDAO(object):
         try:
             sql = ('SELECT ac.content_id, ac.status, ac.create_time, '
                    'sc.title, sc.content, '
-                   'p.prompt '
+                   'p.prompt, p.content_type_id, p.writing_type_id '
                    'FROM aigc_content ac '
                    'JOIN aigc_task at ON ac.task_id = at.task_id AND ac.task_id = %s '
                    'JOIN src_content sc ON ac.src_content_id = sc.content_id '
