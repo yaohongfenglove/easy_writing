@@ -2,13 +2,10 @@ import datetime
 
 from fastapi import Header
 from jose import jwt
-from starlette import status
 
 from conf.config import config
 from items.response import GenericResponse
 from logic.api_key import api_key_logic
-from utils.constants import StatusCodeEnum
-from utils.exceptions import CustomHTTPException, NoApiKeysAvailableError
 
 
 def get_api_key(access_token: str = Header()):

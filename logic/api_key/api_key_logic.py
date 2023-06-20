@@ -47,35 +47,31 @@ def get_api_key(user_id) -> Dict:
     :return:
     """
     user_service = UserService()
-    api_key_list = user_service.get_user_token_left(user_id=user_id)
-    if api_key_list <= 0:
+    user_token_left = user_service.get_user_token_left(user_id=user_id)
+    if user_token_left <= 0:
         raise CustomHTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            code=StatusCodeEnum.NO_API_KEYS_AVAILABLE_ERR.code,
-            msg=StatusCodeEnum.NO_API_KEYS_AVAILABLE_ERR.errmsg,
+            code=StatusCodeEnum.INSUFFICIENT_TOKEN_LEFT_CREDIT.code,
+            msg=StatusCodeEnum.INSUFFICIENT_TOKEN_LEFT_CREDIT.errmsg,
         )
 
     apikey_service = ApiKeyService()
-    access_key_list = apikey_service.get_api_key()
-    access_key = random.sample(access_key_list, 1)
-
-    api_key = access_key[0].get("api_key")
-    api_base = access_key[0].get("api_base")
-    expire_time = access_key[0].get("expire_time")
-    token_left = access_key[0].get("token_left")
+    api_key_list = apikey_service.get_api_key_list()
+    api_key = random.choice(api_key_list)
 
     res = {
-        "api_key": api_key,
-        "api_base": api_base,
-        "expire_time": expire_time,
-        "token_left": token_left
+        "api_key": api_key.get("api_key"),
+        "api_base": api_key.get("api_base"),
+        "expire_time": api_key.get("expire_time"),
+        "token_left": api_key.get("token_left")
     }
 
     return res
 
 
 def main():
-    pass
+    res = get_api_key(user_id=4)
+    print(res)
 
 
 if __name__ == '__main__':
