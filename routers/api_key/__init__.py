@@ -1,11 +1,14 @@
 # coding=utf-8
 
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 
 from routers.api_key import api_key_api
+from utils.dependencies import check_access_token
 
 
-router = APIRouter()
+router = APIRouter(
+    dependencies=[Depends(check_access_token)]
+)
 
 
 router.add_api_route(
