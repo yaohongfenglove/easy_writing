@@ -2,8 +2,11 @@
 
 import datetime
 
+from fastapi import Header
+from jose import jwt
 from starlette import status as starlette_status
 
+from conf.config import config
 from items.response import GenericResponse
 from items.task import TaskRequest
 from logic.task import task_logic
@@ -12,14 +15,18 @@ from utils.exceptions import NoApiKeysAvailableError, CustomHTTPException
 
 
 def get_tasks(
-        user_id: int
+        access_token: str = Header()
 
 ):
     """
     获取特定用户的任务列表
-    :param user_id: 用户id
+    :param access_token: 访问令牌
     :return:
     """
+
+    payload = jwt.decode(access_token, config['access_token']['SECRET_KEY'],
+                         algorithms=[config['access_token']['ALGORITHM']])
+    user_id = payload.get("user_id")
     tasks = task_logic.get_tasks(user_id=user_id)
 
     return GenericResponse(
