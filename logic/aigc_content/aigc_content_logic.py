@@ -23,7 +23,7 @@ def update_content_info(content_id: int, access_token: str, **aigc_content: Aigc
     if aigc_content.get("token_usage_count") is None:
         content_token_usage_count = 0
     else:
-        content_token_usage_count = 1000
+        content_token_usage_count = aigc_content.get("token_usage_count")
 
     aigc_content_service = AigcContentService()
     aigc_content_service.update_content_info(content_id=content_id, **aigc_content)
