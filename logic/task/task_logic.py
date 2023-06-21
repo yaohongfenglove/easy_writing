@@ -1,8 +1,12 @@
+import json
 from typing import List, Dict
+
+from starlette import status
 
 from service.task_service import TaskService
 from service.user_service import UserService
-from utils.exceptions import NoApiKeysAvailableError
+from utils.constants import StatusCodeEnum
+from utils.exceptions import NoApiKeysAvailableError, CustomHTTPException, InsufficientTokenLeftCreditError
 
 
 def get_tasks(user_id: int):
@@ -17,8 +21,8 @@ def get_tasks(user_id: int):
     return tasks
 
 
-def create_task(user_id: int, city_id: int,
-                src_content_ids: List[int], client_version: str) -> Dict:
+def create_task1(user_id: int, city_id: int,
+                 src_content_ids: List[int], client_version: str) -> Dict:
     """
     创建任务
     :param user_id: 用户id
@@ -48,6 +52,41 @@ def create_task(user_id: int, city_id: int,
         "list": task_info,
         "api_key": api_key,
         "api_base": api_base,
+        "task_id": task_id,
+        "status": 0,
+    }
+
+    return res
+
+
+def create_task(user_id: int, city_id: int,
+                src_content_ids: List[int], client_version: str) -> Dict:
+    """
+    创建任务
+    :param user_id: 用户id
+    :param city_id: 城市id
+    :param src_content_ids: 源内容id列表
+    :param client_version: 客户端版本号
+    :return:
+    """
+
+    # 查询用户token余量
+    user_service = UserService()
+    user_token_left = user_service.get_user_token_left(user_id=user_id)
+    if user_token_left <= 0:
+        raise InsufficientTokenLeftCreditError("当前用户没有额度了")
+
+    # 创建任务
+    task_service = TaskService()
+    task_id = task_service.create_task(user_id=user_id, city_id=city_id,
+                                       src_content_ids=src_content_ids, client_version=client_version)
+    # 获取任务对应的详情列表
+    task_info: List[Dict] = task_service.get_task_pro_info(task_id=task_id)
+    for index, item in enumerate(task_info):
+        item["prompt"] = json.loads(item["prompt"])  # 将prompt字符串加载为list格式
+
+    res = {
+        "list": task_info,
         "task_id": task_id,
         "status": 0,
     }

@@ -1,11 +1,13 @@
 # coding=utf-8
 
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 
 from routers.task import task_api
+from utils.dependencies import check_access_token
 
-
-router = APIRouter()
+router = APIRouter(
+    dependencies=[Depends(check_access_token)]
+)
 
 
 router.add_api_route(
@@ -13,7 +15,7 @@ router.add_api_route(
     task_api.get_tasks,
     methods=['get'],
     summary='获取任务列表',
-    description="通过用户id，获取任务列表"
+    description="通过用户访问令牌，获取任务列表"
 )
 
 

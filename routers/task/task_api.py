@@ -2,24 +2,31 @@
 
 import datetime
 
+from fastapi import Header
+from jose import jwt
 from starlette import status as starlette_status
 
+from conf.config import config
 from items.response import GenericResponse
 from items.task import TaskRequest
 from logic.task import task_logic
 from utils.constants import StatusCodeEnum
-from utils.exceptions import NoApiKeysAvailableError, CustomHTTPException
+from utils.exceptions import NoApiKeysAvailableError, CustomHTTPException, InsufficientTokenLeftCreditError
 
 
 def get_tasks(
-        user_id: int
+        access_token: str = Header()
 
 ):
     """
     获取特定用户的任务列表
-    :param user_id: 用户id
+    :param access_token: 访问令牌
     :return:
     """
+
+    payload = jwt.decode(access_token, config['access_token']['SECRET_KEY'],
+                         algorithms=[config['access_token']['ALGORITHM']])
+    user_id = payload.get("user_id")
     tasks = task_logic.get_tasks(user_id=user_id)
 
     return GenericResponse(
@@ -41,11 +48,11 @@ def create_task(
     """
     try:
         res = task_logic.create_task(**task.dict())
-    except NoApiKeysAvailableError:
+    except InsufficientTokenLeftCreditError:
         raise CustomHTTPException(
             status_code=starlette_status.HTTP_400_BAD_REQUEST,
-            code=StatusCodeEnum.NO_API_KEYS_AVAILABLE_ERR.code,
-            msg=StatusCodeEnum.NO_API_KEYS_AVAILABLE_ERR.errmsg,
+            code=StatusCodeEnum.INSUFFICIENT_TOKEN_LEFT_CREDIT.code,
+            msg=StatusCodeEnum.INSUFFICIENT_TOKEN_LEFT_CREDIT.errmsg,
         )
 
     return GenericResponse(

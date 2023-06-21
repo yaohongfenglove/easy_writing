@@ -1,5 +1,4 @@
-from typing import Dict
-
+from typing import Dict, List
 
 from conf.config import MYSQL_CONFIG
 from db.mysql.mysql_db import MysqlClient
@@ -37,7 +36,7 @@ class UserDAO(object):
 
         return user
 
-    def get_user_city_list(self, user_id: int):
+    def get_user_city_list(self, user_id: int) -> List:
         """
         获取用户的城市列表
         :param user_id: 用户id
@@ -83,6 +82,29 @@ class UserDAO(object):
 
         return api_key_list
 
+    def get_user_token_left(self, user_id: int) -> int:
+        """
+        获取用户的token_left
+        :param user_id: 用户id
+        :return:
+        """
+        mysql_conn = self.get_mysql_conn()
+        api_key_list = list()
+        try:
+            sql = ('SELECT token_left '
+                   'FROM user '
+                   'WHERE user_id = %s ')
+            args = (user_id, )
+            user_token_left = mysql_conn.fetchone(sql, args=args)
+            if user_token_left is None:
+                return None
+            token_left = user_token_left["token_left"]
+        finally:
+            if "mysql_conn" in dir():  # 判断连接是否成功创建，创建了才能执行close()
+                mysql_conn.close()
+
+        return token_left
+
 
 def main():
     user_dao = UserDAO()
@@ -90,7 +112,7 @@ def main():
     res = user_dao.get_user_city_list(user_id=1)
     print(f"{res}")
 
-    res = user_dao.get_user_api_key_list(user_id=2)
+    res = user_dao.get_user_token_left(user_id=2)
     print(f"{res}")
 
 

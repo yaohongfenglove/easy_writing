@@ -1,27 +1,23 @@
 import datetime
 
-from starlette import status
+from fastapi import Header
+from jose import jwt
 
+from conf.config import config
 from items.response import GenericResponse
 from logic.api_key import api_key_logic
-from utils.constants import StatusCodeEnum
-from utils.exceptions import CustomHTTPException, NoApiKeysAvailableError
 
 
-def get_api_key(access_token: str):
+def get_api_key(access_token: str = Header()):
     """
     获取api_key
-    :param access_token: 访问令牌
+    :param: access_token: 访问令牌
     :return:
     """
-    try:
-        api_key = api_key_logic.get_api_key(access_token=access_token)
-    except NoApiKeysAvailableError:
-        raise CustomHTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            code=StatusCodeEnum.NO_API_KEYS_AVAILABLE_ERR.code,
-            msg=StatusCodeEnum.NO_API_KEYS_AVAILABLE_ERR.errmsg,
-        )
+    payload = jwt.decode(access_token, config['access_token']['SECRET_KEY'],
+                         algorithms=[config['access_token']['ALGORITHM']])
+    user_id = payload.get("user_id")
+    api_key = api_key_logic.get_api_key(user_id=user_id)
 
     return GenericResponse(
         now=int(datetime.datetime.now().timestamp()),
@@ -30,6 +26,7 @@ def get_api_key(access_token: str):
                 "api_key": api_key.get("api_key"),
                 "api_base": api_key.get("api_base"),
                 "expire_time": api_key.get("expire_time"),
+                "token_left": api_key.get("token_left")
             }
         }
     )

@@ -44,3 +44,10 @@ class NoApiKeysAvailableError(Exception):
     无可用的api_key了
     """
     ...
+
+
+class InsufficientTokenLeftCreditError(Exception):
+    """
+    当前用户没有额度了
+    """
+    ...
