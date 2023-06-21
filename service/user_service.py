@@ -31,10 +31,20 @@ class UserService(object):
 
     def get_user_token_left(self, user_id: int) -> int:
         """
-        获取用户的api_key列表
+        获取用户的token_left
         :param user_id: 用户id
-        :return:
+        :return: token_left
         """
         token_left = self._user_dao.get_user_token_left(user_id=user_id)
 
         return token_left
+
+    def get_user_api_key_list(self, user_id: int) -> List[Dict]:
+        """
+        获取用户的api_key列表
+        :param user_id: 用户id
+        :return:
+        """
+        api_key_list = self._user_dao.get_user_api_key_list(user_id=user_id)
+
+        return api_key_list

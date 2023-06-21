@@ -58,6 +58,30 @@ class UserDAO(object):
 
         return city_list
 
+    @datetime_to_strftime
+    def get_user_api_key_list(self, user_id: int):
+        """
+        获取用户的api_key列表
+        :param user_id: 用户id
+        :return:
+        """
+        mysql_conn = self.get_mysql_conn()
+        api_key_list = list()
+        try:
+            sql = ('SELECT api_key, api_base, token_total, token_left, expire_time '
+                   'FROM api_key '
+                   'WHERE user_id = %s '
+                   'AND token_left > 0 '
+                   'AND expire_time > NOW() '
+                   'ORDER BY expire_time;')
+            args = (user_id, )
+            _, api_key_list = mysql_conn.fetchall(sql, args=args)
+        finally:
+            if "mysql_conn" in dir():  # 判断连接是否成功创建，创建了才能执行close()
+                mysql_conn.close()
+
+        return api_key_list
+
     def get_user_token_left(self, user_id: int) -> int:
         """
         获取用户的token_left
