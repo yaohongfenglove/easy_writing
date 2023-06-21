@@ -6,7 +6,7 @@ from starlette import status
 from service.task_service import TaskService
 from service.user_service import UserService
 from utils.constants import StatusCodeEnum
-from utils.exceptions import NoApiKeysAvailableError, CustomHTTPException
+from utils.exceptions import NoApiKeysAvailableError, CustomHTTPException, InsufficientTokenLeftCreditError
 
 
 def get_tasks(user_id: int):
@@ -74,22 +74,16 @@ def create_task(user_id: int, city_id: int,
     user_service = UserService()
     user_token_left = user_service.get_user_token_left(user_id=user_id)
     if user_token_left <= 0:
-        raise CustomHTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            code=StatusCodeEnum.INSUFFICIENT_TOKEN_LEFT_CREDIT.code,
-            msg=StatusCodeEnum.INSUFFICIENT_TOKEN_LEFT_CREDIT.errmsg,
-        )
+        raise InsufficientTokenLeftCreditError("当前用户没有额度了")
 
     # 创建任务
     task_service = TaskService()
     task_id = task_service.create_task(user_id=user_id, city_id=city_id,
                                        src_content_ids=src_content_ids, client_version=client_version)
     # 获取任务对应的详情列表
-    task_info = task_service.get_task_pro_info(task_id=task_id)
+    task_info: List[Dict] = task_service.get_task_pro_info(task_id=task_id)
     for index, item in enumerate(task_info):
-        task_info_prompt = task_info[index].get("prompt")
-        task_info_prompt = json.loads(task_info_prompt)
-        task_info[index]["prompt"] = task_info_prompt
+        item["prompt"] = json.loads(item["prompt"])  # 将prompt字符串加载为list格式
 
     res = {
         "list": task_info,

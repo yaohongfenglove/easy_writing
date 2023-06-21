@@ -11,7 +11,7 @@ from items.response import GenericResponse
 from items.task import TaskRequest
 from logic.task import task_logic
 from utils.constants import StatusCodeEnum
-from utils.exceptions import NoApiKeysAvailableError, CustomHTTPException
+from utils.exceptions import NoApiKeysAvailableError, CustomHTTPException, InsufficientTokenLeftCreditError
 
 
 def get_tasks(
@@ -48,11 +48,11 @@ def create_task(
     """
     try:
         res = task_logic.create_task(**task.dict())
-    except NoApiKeysAvailableError:
+    except InsufficientTokenLeftCreditError:
         raise CustomHTTPException(
             status_code=starlette_status.HTTP_400_BAD_REQUEST,
-            code=StatusCodeEnum.NO_API_KEYS_AVAILABLE_ERR.code,
-            msg=StatusCodeEnum.NO_API_KEYS_AVAILABLE_ERR.errmsg,
+            code=StatusCodeEnum.INSUFFICIENT_TOKEN_LEFT_CREDIT.code,
+            msg=StatusCodeEnum.INSUFFICIENT_TOKEN_LEFT_CREDIT.errmsg,
         )
 
     return GenericResponse(
