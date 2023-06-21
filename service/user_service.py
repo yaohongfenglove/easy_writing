@@ -48,3 +48,12 @@ class UserService(object):
         api_key_list = self._user_dao.get_user_api_key_list(user_id=user_id)
 
         return api_key_list
+
+    def update_user_token_left(self, user_id: int, user_token_left: int):
+        """
+        更新用户的token余量
+        :param: user_id: 用户id
+        :param: user_token_left:用户token余量
+        :return:
+        """
+        self._user_dao.update_user_token_left(user_id=user_id, user_token_left=user_token_left)
