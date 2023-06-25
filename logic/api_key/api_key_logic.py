@@ -60,6 +60,7 @@ def get_api_key(user_id) -> Dict:
     api_key = random.choice(api_key_list)
 
     res = {
+        "api_key_id": api_key.get("api_key_id"),
         "api_key": api_key.get("api_key"),
         "api_base": api_key.get("api_base"),
         "expire_time": api_key.get("expire_time"),

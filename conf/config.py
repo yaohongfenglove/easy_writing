@@ -39,7 +39,8 @@ if DEBUG:
         "user": config["mysql"]["debug"]["user"],
         "password": config["mysql"]["debug"]["password"],
         "database": config["mysql"]["debug"]["database"],
-        "charset": config["mysql"]["debug"]["charset"]
+        "charset": config["mysql"]["debug"]["charset"],
+        "autocommit": False
     }
 
     REDIS_CONFIG = {
@@ -59,7 +60,8 @@ else:
         "user": config["mysql"]["production"]["user"],
         "password": config["mysql"]["production"]["password"],
         "database": config["mysql"]["production"]["database"],
-        "charset": config["mysql"]["production"]["charset"]
+        "charset": config["mysql"]["production"]["charset"],
+        "autocommit": False
     }
 
     REDIS_CONFIG = {

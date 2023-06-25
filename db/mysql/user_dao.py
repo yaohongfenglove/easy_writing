@@ -1,4 +1,4 @@
-from typing import Dict, List
+from typing import Dict, List, Union
 
 from conf.config import MYSQL_CONFIG
 from db.mysql.mysql_db import MysqlClient
@@ -82,7 +82,7 @@ class UserDAO(object):
 
         return api_key_list
 
-    def get_user_token_left(self, user_id: int) -> int:
+    def get_user_token_left(self, user_id: int) -> Union[int, None]:
         """
         获取用户的token_left
         :param user_id: 用户id
@@ -105,6 +105,29 @@ class UserDAO(object):
 
         return token_left
 
+    def update_user_token_left(self, user_id, user_token_left: int) -> int:
+        """
+        更新用户的token余量
+        :param user_id: 用户id
+        :param user_token_left: 用户token余量
+        :return:
+        """
+        mysql_conn = self.get_mysql_conn()
+
+        try:
+            sql = ('UPDATE `user` '
+                   'SET token_left = %s '
+                   'WHERE user_id = %s; ')
+            args = (user_token_left, user_id)
+
+            count = mysql_conn.execute(sql, args)
+            mysql_conn.commit()
+
+            return count
+        finally:
+            if "mysql_conn" in dir():  # 判断连接是否成功创建，创建了才能执行close()
+                mysql_conn.close()
+
 
 def main():
     user_dao = UserDAO()
@@ -113,6 +136,9 @@ def main():
     print(f"{res}")
 
     res = user_dao.get_user_token_left(user_id=2)
+    print(f"{res}")
+
+    res = user_dao.update_user_token_left(user_id=4, user_token_left=456824)
     print(f"{res}")
 
 

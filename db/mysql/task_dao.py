@@ -21,10 +21,12 @@ class TaskDAO(object):
         return mysql_conn
 
     @datetime_to_strftime
-    def get_tasks(self, user_id: int) -> List[Dict]:
+    def get_tasks(self, user_id: int, page: int, page_size: int) -> List[Dict]:
         """
         获取特定用户的任务列表
         :param user_id: 用户id
+        :param page: 页码
+        :param page_size: 每页多少条数据
         :return:
         """
         mysql_conn = self.get_mysql_conn()
@@ -32,8 +34,10 @@ class TaskDAO(object):
         try:
             sql = ('SELECT task_id, status, create_time '
                    'FROM aigc_task '
-                   'WHERE user_id = %s;')
-            args = (user_id, )
+                   'WHERE user_id = %s '
+                   'ORDER BY create_time DESC '
+                   'LIMIT %s, %s;')
+            args = (user_id, (page - 1)*page_size, page_size)
             _, tasks = mysql_conn.fetchall(sql, args=args)
         finally:
             if "mysql_conn" in dir():  # 判断连接是否成功创建，创建了才能执行close()

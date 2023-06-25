@@ -15,6 +15,7 @@ class AigcContentRequest(BaseModel):
     请求时的AIGC内容对象
     """
     status: int  # 内容生成的进度
+    api_key_id: int  # key的id
     content: Union[str, None] = None  # 正文
     token_usage_count: Union[int, None] = None  # token使用量
     title: Union[str, None] = None  # 标题
