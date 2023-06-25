@@ -1,22 +1,25 @@
 import json
 from typing import List, Dict
 
-from starlette import status
 
 from service.task_service import TaskService
 from service.user_service import UserService
-from utils.constants import StatusCodeEnum
-from utils.exceptions import NoApiKeysAvailableError, CustomHTTPException, InsufficientTokenLeftCreditError
+from utils.exceptions import NoApiKeysAvailableError, InsufficientTokenLeftCreditError
 
 
-def get_tasks(user_id: int):
+def get_tasks(user_id: int, page: int, page_size: int) -> List[Dict]:
     """
     获取特定用户的任务列表
     :param user_id: 用户id
+    :param page: 页码
+    :param page_size: 每页多少条数据
     :return:
     """
+
+    page_size = min(page_size, 40)  # 每页几条记录做最大限制
+
     task_service = TaskService()
-    tasks = task_service.get_tasks(user_id=user_id)
+    tasks = task_service.get_tasks(user_id=user_id, page=page, page_size=page_size)
 
     return tasks
 

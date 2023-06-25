@@ -11,23 +11,26 @@ from items.response import GenericResponse
 from items.task import TaskRequest
 from logic.task import task_logic
 from utils.constants import StatusCodeEnum
-from utils.exceptions import NoApiKeysAvailableError, CustomHTTPException, InsufficientTokenLeftCreditError
+from utils.exceptions import CustomHTTPException, InsufficientTokenLeftCreditError
 
 
 def get_tasks(
-        access_token: str = Header()
-
+        access_token: str = Header(),
+        page: int = 1,
+        page_size: int = 20
 ):
     """
     获取特定用户的任务列表
     :param access_token: 访问令牌
+    :param page: 页码
+    :param page_size: 每页多少条数据
     :return:
     """
 
     payload = jwt.decode(access_token, config['access_token']['SECRET_KEY'],
                          algorithms=[config['access_token']['ALGORITHM']])
     user_id = payload.get("user_id")
-    tasks = task_logic.get_tasks(user_id=user_id)
+    tasks = task_logic.get_tasks(user_id=user_id, page=page, page_size=page_size)
 
     return GenericResponse(
         now=int(datetime.datetime.now().timestamp()),
