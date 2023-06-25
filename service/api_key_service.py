@@ -19,6 +19,25 @@ class ApiKeyService(object):
 
         return api_key_list
 
+    def get_api_key_token_left(self, api_key_id: int):
+        """
+        获取key的token余量
+        :param api_key_id: key的id
+        :return:
+        """
+        api_key_token_left = self._apikey_dao.get_api_key_token_left(api_key_id=api_key_id)
+
+        return api_key_token_left
+
+    def update_api_key_token_left(self, api_key_id: int, api_key_token_left: int):
+        """
+        更新api_key的token余量
+        :param: api_key_id: api_key的id
+        :param: user_token_left:用户token余量
+        :return:
+        """
+        self._apikey_dao.update_api_key_token_left(api_key_id=api_key_id, api_key_token_left=api_key_token_left)
+
 
 def main():
     apikey = ApiKeyService()

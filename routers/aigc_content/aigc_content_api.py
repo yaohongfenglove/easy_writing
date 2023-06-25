@@ -2,6 +2,8 @@
 
 import datetime
 
+from fastapi import Header
+
 from items.aigc_content import AigcContentRequest
 from items.response import GenericResponse
 from logic.aigc_content import aigc_content_logic
@@ -9,16 +11,18 @@ from logic.aigc_content import aigc_content_logic
 
 def update_aigc_content(
         content_id: int,
-        aigc_content: AigcContentRequest
+        aigc_content: AigcContentRequest,
+        access_token: str = Header()
 ):
     """
     更新内容信息
+    :param access_token:访问令牌
     :param content_id: 内容id
     :param aigc_content: AIGC内容对象
     :return: 任务id
     """
 
-    aigc_content_logic.update_content_info(content_id=content_id, **aigc_content.dict())
+    aigc_content_logic.update_content_info(content_id=content_id, **aigc_content.dict(), access_token=access_token)
 
     return GenericResponse(
         now=int(datetime.datetime.now().timestamp()),
