@@ -83,7 +83,12 @@ def create_task(user_id: int, city_id: int,
     # 获取任务对应的详情列表
     task_info: List[Dict] = task_service.get_task_pro_info(task_id=task_id)
     for index, item in enumerate(task_info):
-        item["prompt"] = json.loads(item["prompt"])  # 将prompt字符串加载为list格式
+        prompts = json.loads(item["prompt"])
+        for prompt in prompts:
+            input_variables = prompt.get("input_variables")
+            for input_variable in input_variables:
+                input_variable["value"] = item[input_variable["name"]]
+        item["prompt"] = prompts
 
     res = {
         "list": task_info,
