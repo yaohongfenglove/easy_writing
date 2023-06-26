@@ -1,6 +1,7 @@
 import random
 from typing import Dict
 
+from AesEverywhere import aes256
 from jose import jwt
 from starlette import status
 
@@ -32,8 +33,8 @@ def get_api_key1(access_token: str) -> Dict:
     expire_time = api_key_list[0].get("expire_time")
 
     res = {
-        "api_key": api_key,
-        "api_base": api_base,
+        "api_key": aes256.encrypt(api_key, config["encrypt"]["SECRET_KEY_AES"]),
+        "api_base": aes256.encrypt(api_base, config["encrypt"]["SECRET_KEY_AES"]),
         "expire_time": expire_time
     }
 
@@ -61,8 +62,8 @@ def get_api_key(user_id) -> Dict:
 
     res = {
         "api_key_id": api_key.get("api_key_id"),
-        "api_key": api_key.get("api_key"),
-        "api_base": api_key.get("api_base"),
+        "api_key": aes256.encrypt(api_key.get("api_key"), config["encrypt"]["SECRET_KEY_AES"]),
+        "api_base": aes256.encrypt(api_key.get("api_base"), config["encrypt"]["SECRET_KEY_AES"]),
         "expire_time": api_key.get("expire_time"),
         "token_left": api_key.get("token_left")
     }
