@@ -90,6 +90,7 @@ def get_user_info(access_token: str = Header()):
         now=int(datetime.datetime.now().timestamp()),
         data={
             "user_id": user["user_id"],
+            "phone": user["phone"],
             "city_list": user_extra_info.get("city_list"),
             "token_left": user_extra_info.get("token_left"),
             "article_left": user_extra_info.get("article_left"),

@@ -1,9 +1,12 @@
 import json
 from typing import List, Dict
 
+from AesEverywhere import aes256
 
+from conf.config import config
 from service.task_service import TaskService
 from service.user_service import UserService
+from utils.constants import TASK_STATUS
 from utils.exceptions import NoApiKeysAvailableError, InsufficientTokenLeftCreditError
 
 
@@ -53,10 +56,10 @@ def create_task1(user_id: int, city_id: int,
 
     res = {
         "list": task_info,
-        "api_key": api_key,
-        "api_base": api_base,
+        "api_key": aes256.encrypt(api_key, config["encrypt"]["SECRET_KEY_AES"]),
+        "api_base": aes256.encrypt(api_base, config["encrypt"]["SECRET_KEY_AES"]),
         "task_id": task_id,
-        "status": 0,
+        "status": TASK_STATUS["waiting"],
     }
 
     return res
