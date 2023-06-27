@@ -21,8 +21,8 @@ class AigcContentRequest(BaseModel):
     title: Union[str, None] = None  # 标题
     summary: Union[str, None] = None  # 摘要
     keywords: Union[str, None] = None  # 关键词
-    word_count: Union[str, None] = None  # 字数
-    originality: Union[str, None] = None  # 原创度
+    word_count: Union[int, None] = None  # 字数
+    originality: Union[float, None] = None  # 原创度
 
 
 class AigcContentResponse(BaseModel):
