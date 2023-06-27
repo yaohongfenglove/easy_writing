@@ -19,7 +19,7 @@ class ApiKeyService(object):
 
         return api_key_list
 
-    def get_api_key_token_left(self, api_key_id: int):
+    def get_api_key_token_left(self, api_key_id):
         """
         获取key的token余量
         :param api_key_id: key的id
@@ -29,7 +29,7 @@ class ApiKeyService(object):
 
         return api_key_token_left
 
-    def update_api_key_token_left(self, api_key_id: int, api_key_token_left: int):
+    def update_api_key_token_left(self, api_key_id, api_key_token_left: int):
         """
         更新api_key的token余量
         :param: api_key_id: api_key的id

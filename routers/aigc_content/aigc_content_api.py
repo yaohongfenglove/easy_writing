@@ -22,7 +22,7 @@ def update_aigc_content(
     :return: 任务id
     """
 
-    aigc_content_logic.update_content_info(content_id=content_id, **aigc_content.dict(), access_token=access_token)
+    aigc_content_logic.update_content_info(content_id=content_id, aigc_content=aigc_content, access_token=access_token)
 
     return GenericResponse(
         now=int(datetime.datetime.now().timestamp()),

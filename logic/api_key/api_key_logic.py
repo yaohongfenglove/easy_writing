@@ -1,4 +1,5 @@
 import random
+import warnings
 from typing import Dict
 
 from AesEverywhere import aes256
@@ -18,6 +19,9 @@ def get_api_key1(access_token: str) -> Dict:
     :param access_token: 访问令牌
     :return:
     """
+
+    warnings.warn("此函数已弃用，不推荐使用", DeprecationWarning)
+
     payload = jwt.decode(access_token, config['access_token']['SECRET_KEY'],
                          algorithms=[config['access_token']['ALGORITHM']])
     user_id = payload.get("user_id")
