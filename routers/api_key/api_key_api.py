@@ -23,6 +23,7 @@ def get_api_key(access_token: str = Header()):
         now=int(datetime.datetime.now().timestamp()),
         data={
             "result": {
+                "api_key_id": api_key.get("api_key_id"),
                 "api_key": api_key.get("api_key"),
                 "api_base": api_key.get("api_base"),
                 "expire_time": api_key.get("expire_time"),
