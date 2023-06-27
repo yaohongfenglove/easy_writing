@@ -64,23 +64,13 @@ class AigcContentDAO(object):
             if "mysql_conn" in dir():  # 判断连接是否成功创建，创建了才能执行close()
                 mysql_conn.close()
 
-    def update_content_info(self,
-                            content_id: int,
-                            status: int,
-                            user_id: int,
-                            content: str,
-                            token_usage_count: int,
-                            title: str,
-                            summary: str,
-                            keywords: str,
-                            word_count: int,
-                            originality: float,
-                            ) -> int:
+    def update_content_info(self, content_id: int, user_id: int, status: int, content: str, token_usage_count: int,
+                            title: str, summary: str, keywords: str, word_count: int, originality: float) -> int:
         """
         更新内容信息
         :param content_id: 内容id
-        :param status: 内容生成的进度
         :param user_id: 用户id
+        :param status: 内容生成的进度
         :param content: 正文
         :param token_usage_count: token使用量
         :param title: 标题
@@ -88,7 +78,7 @@ class AigcContentDAO(object):
         :param keywords: 关键词
         :param word_count: 字数
         :param originality: 原创度
-        :return: 任务id
+        :return:
         """
         mysql_conn = self.get_mysql_conn()
 
