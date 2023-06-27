@@ -1,4 +1,5 @@
 import json
+import warnings
 from typing import List, Dict
 
 from AesEverywhere import aes256
@@ -37,6 +38,7 @@ def create_task1(user_id: int, city_id: int,
     :param client_version: 客户端版本号
     :return:
     """
+    warnings.warn("此函数已弃用，不推荐使用", DeprecationWarning)
 
     # 查询可用的api_key
     user_server = UserService()

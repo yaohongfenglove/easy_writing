@@ -1,3 +1,5 @@
+import warnings
+
 from conf.config import MYSQL_CONFIG
 from db.mysql.mysql_db import MysqlClient
 from items.aigc_content import AigcContentRequest
@@ -40,6 +42,8 @@ class AigcContentDAO(object):
         :param content_id: 内容id
         :return:
         """
+        warnings.warn("此方法已弃用，不推荐使用", DeprecationWarning)
+
         mysql_conn = self.get_mysql_conn()
 
         try:
