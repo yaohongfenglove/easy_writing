@@ -19,10 +19,11 @@ class AigcContentService(object):
         content_info = self._task_dao.get_content_info(content_id=content_id)
         return content_info
 
-    def update_content_info(self, content_id: int, user_id: int, status: int, content: str, token_usage_count: int,
-                            title: str, summary: str, keywords: str, word_count: int, originality: float, **kwargs):
+    def update_info(self, content_id: int, user_id: int, status: int, content: str, token_usage_count: int,
+                    title: str, summary: str, keywords: str, word_count: int, originality: float,
+                    user_token_left: int, api_key_token_left: int, api_key_id: int, **kwargs):
         """
-        更新内容信息
+        更新content-token_left信息
         :param content_id: 内容id
         :param user_id: 用户id
         :param status: 内容生成的进度
@@ -34,9 +35,13 @@ class AigcContentService(object):
         :param word_count: 字数
         :param originality: 原创度
         :param kwargs: TODO 2023-6-27 10:51:25 AigcContentRequest类抽离api_key_id属性后，删去**kwargs
+        :param api_key_id: api_Key的id
+        :param api_key_token_left: api_key的token剩余量
+        :param user_token_left: 用户的token剩余量
         :return:
         """
-        self._task_dao.update_content_info(
+        self._task_dao.update_info(
             content_id=content_id, user_id=user_id, status=status, content=content, token_usage_count=token_usage_count,
             title=title, summary=summary, keywords=keywords, word_count=word_count, originality=originality,
+            user_token_left=user_token_left, api_key_token_left=api_key_token_left, api_key_id=api_key_id
         )
