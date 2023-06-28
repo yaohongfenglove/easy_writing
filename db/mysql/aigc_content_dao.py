@@ -75,7 +75,7 @@ class AigcContentDAO(object):
 
     def update_info(self, content_id: int, user_id: int, status: int, content: str, token_usage_count: int,
                     title: str, summary: str, keywords: str, word_count: int, originality: float,
-                    user_token_left: int, api_key_token_left: int, api_key_id: int) -> int:
+                    api_key_id: int) -> int:
         """
         更新content-token_left信息
         :param content_id: 内容id
@@ -89,8 +89,6 @@ class AigcContentDAO(object):
         :param word_count: 字数
         :param originality: 原创度
         :param api_key_id: api_Key的id
-        :param api_key_token_left: api_key的token剩余量
-        :param user_token_left: 用户的token剩余量
         :return:
         """
         mysql_conn = self.get_mysql_conn()
@@ -147,17 +145,17 @@ class AigcContentDAO(object):
 
             # 2. 更新用户的token剩余量
             sql = ('UPDATE `user` '
-                   'SET token_left = %s '
+                   'SET token_left = token_left - %s '
                    'WHERE user_id = %s; ')
-            args = (user_token_left, user_id)
+            args = (token_usage_count, user_id)
 
             mysql_conn.execute(sql, args)
 
             # 3.更新api_key的token剩余量
             sql = ('UPDATE api_key '
-                   'SET token_left=%s '
+                   'SET token_left= token_left - %s '
                    'WHERE api_key_id=%s; ')
-            args = (api_key_token_left, api_key_id)
+            args = (token_usage_count, api_key_id)
 
             mysql_conn.execute(sql, args)
 

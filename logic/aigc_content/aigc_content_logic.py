@@ -1,3 +1,4 @@
+import warnings
 from typing import Dict, Union
 
 from jose import jwt
@@ -9,8 +10,7 @@ from service.api_key_service import ApiKeyService
 from service.user_service import UserService
 
 
-# TODO 2023-6-27 10:16:15 sql事物控制
-def update_content_info(content_id: int, aigc_content: AigcContentRequest, access_token: str):
+def update_content_info1(content_id: int, aigc_content: AigcContentRequest, access_token: str):
     """
     更新content-token_left信息
     :param content_id: 内容id
@@ -18,6 +18,7 @@ def update_content_info(content_id: int, aigc_content: AigcContentRequest, acces
     :param access_token: 访问令牌
     :return:
     """
+    warnings.warn("此方法已弃用，不推荐使用", DeprecationWarning)
 
     payload = jwt.decode(access_token, config['access_token']['SECRET_KEY'],
                          algorithms=[config['access_token']['ALGORITHM']])
@@ -39,6 +40,24 @@ def update_content_info(content_id: int, aigc_content: AigcContentRequest, acces
     aigc_content_service = AigcContentService()
     aigc_content_service.update_info(content_id=content_id, user_id=user_id, user_token_left=user_token_left,
                                      api_key_token_left=api_key_token_left, **aigc_content.dict())
+
+
+# TODO 2023-6-27 10:16:15 sql事物控制
+def update_content_info(content_id: int, aigc_content: AigcContentRequest, access_token: str):
+    """
+    更新content-token_left信息
+    :param content_id: 内容id
+    :param aigc_content: AIGC内容对象
+    :param access_token: 访问令牌
+    :return:
+    """
+
+    payload = jwt.decode(access_token, config['access_token']['SECRET_KEY'],
+                         algorithms=[config['access_token']['ALGORITHM']])
+    user_id = payload.get("user_id")
+
+    aigc_content_service = AigcContentService()
+    aigc_content_service.update_info(content_id=content_id, user_id=user_id, **aigc_content.dict())
 
 
 def get_src_content(content_id: int) -> Dict:
