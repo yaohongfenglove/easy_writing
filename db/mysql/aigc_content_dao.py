@@ -6,7 +6,7 @@ from pymysql import DatabaseError
 from conf.config import MYSQL_CONFIG, logger
 from db.mysql.mysql_db import MysqlClient
 from items.aigc_content import AigcContentRequest
-from utils.exceptions import ContentTokenLeftUpdateError
+from utils.exceptions import AigcContentUpdateError
 
 
 class AigcContentDAO(object):
@@ -73,11 +73,11 @@ class AigcContentDAO(object):
             if "mysql_conn" in dir():  # 判断连接是否成功创建，创建了才能执行close()
                 mysql_conn.close()
 
-    def update_info(self, content_id: int, user_id: int, status: int, content: str, token_usage_count: int,
-                    title: str, summary: str, keywords: str, word_count: int, originality: float,
-                    api_key_id: int) -> int:
+    def update_content_info(self, content_id: int, user_id: int, status: int, content: str, token_usage_count: int,
+                            title: str, summary: str, keywords: str, word_count: int, originality: float,
+                            api_key_id: int) -> int:
         """
-        更新content-token_left信息
+        更新内容信息
         :param content_id: 内容id
         :param user_id: 用户id
         :param status: 内容生成的进度
@@ -166,12 +166,12 @@ class AigcContentDAO(object):
             mysql_conn.rollback()
             error_str = traceback.format_exc()
             logger.error(error_str)
-            raise ContentTokenLeftUpdateError("文章token用量更新失败")
+            raise AigcContentUpdateError("aigc内容更新失败")
         except Exception:
             mysql_conn.rollback()
             error_str = traceback.format_exc()
             logger.error(error_str)
-            raise ContentTokenLeftUpdateError("文章token用量更新失败")
+            raise AigcContentUpdateError("aigc内容更新失败")
         finally:
             if "mysql_conn" in dir():  # 判断连接是否成功创建，创建了才能执行close()
                 mysql_conn.close()
