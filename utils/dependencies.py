@@ -39,3 +39,31 @@ def check_access_token(access_token: str = Header()):
             code=StatusCodeEnum.ACCESS_TOKEN_HAS_EXPIRED.code,
             msg=StatusCodeEnum.ACCESS_TOKEN_HAS_EXPIRED.errmsg
         )
+
+
+def validate_phone(phone: str) -> str:
+    """
+    校验手机号
+    :param phone: 手机号
+    """
+    phone = phone.strip()
+
+    # 校验手机号长度
+    if len(phone) != 11:
+        raise CustomHTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            code=StatusCodeEnum.FORMAT_OF_PHONE_NUMBER_ERR.code,
+            msg=StatusCodeEnum.FORMAT_OF_PHONE_NUMBER_ERR.errmsg
+        )
+
+    # 校验手机号开头
+    if not phone.startswith('1'):
+        raise CustomHTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            code=StatusCodeEnum.FORMAT_OF_PHONE_NUMBER_ERR.code,
+            msg=StatusCodeEnum.FORMAT_OF_PHONE_NUMBER_ERR.errmsg
+        )
+
+    # 其他校验逻辑...
+
+    return phone
