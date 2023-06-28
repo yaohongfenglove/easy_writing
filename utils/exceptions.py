@@ -11,6 +11,11 @@ class TaskCreateError(Exception):
         self.message = message
 
 
+class ContentTokenLeftUpdateError(Exception):
+    def __init__(self, message: str):
+        self.message = message
+
+
 class CustomHTTPException(HTTPException):
     """ 自定义http异常 """
     def __init__(self, status_code: int, detail: Any = None, headers: Optional[Dict[str, Any]] = None,
