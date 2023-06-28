@@ -11,7 +11,8 @@ class StatusCodeEnum(Enum):  # 错误码定义
     VERIFICATION_CODE_ERR = (40004, '验证码错误')
     REQUEST_IS_TOO_FREQUENT = (40005, '请求过于频繁')
     INSUFFICIENT_TOKEN_LEFT_CREDIT = (40006, '无额度可用')
-    FORMAT_OF_PHONE_NUMBER_ERR = (40007, '手机号格式错误')
+
+    FORMAT_OF_PHONE_NUMBER_ERR = (40008, '手机号格式错误')
 
     ACCESS_TOKEN_HAS_EXPIRED = (40101, '访问令牌已过期')
     USER_NOT_FOUND = (40102, '未找到用户')
