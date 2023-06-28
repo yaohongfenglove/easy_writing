@@ -11,6 +11,7 @@ class StatusCodeEnum(Enum):  # 错误码定义
     VERIFICATION_CODE_ERR = (40004, '验证码错误')
     REQUEST_IS_TOO_FREQUENT = (40005, '请求过于频繁')
     INSUFFICIENT_TOKEN_LEFT_CREDIT = (40006, '无额度可用')
+    AIGC_CONTENT_UPDATE_ERROR = (40007, 'aigc内容更新失败')
 
     FORMAT_OF_PHONE_NUMBER_ERR = (40008, '手机号格式错误')
 

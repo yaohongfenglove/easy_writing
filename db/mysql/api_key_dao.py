@@ -1,3 +1,4 @@
+import warnings
 from typing import List, Dict, Union
 
 from conf.config import MYSQL_CONFIG
@@ -70,6 +71,8 @@ class ApiKeyDAO(object):
         :param: user_token_left:用户token余量
         :return:
         """
+        warnings.warn("此方法已弃用，不推荐使用", DeprecationWarning)
+
         mysql_conn = self.get_mysql_conn()
 
         try:
