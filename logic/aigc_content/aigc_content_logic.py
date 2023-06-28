@@ -12,7 +12,7 @@ from service.user_service import UserService
 
 def update_content_info1(content_id: int, aigc_content: AigcContentRequest, access_token: str):
     """
-    更新content-token_left信息
+    更新内容信息
     :param content_id: 内容id
     :param aigc_content: AIGC内容对象
     :param access_token: 访问令牌
@@ -38,14 +38,14 @@ def update_content_info1(content_id: int, aigc_content: AigcContentRequest, acce
     api_key_token_left = api_key_token_left_old - content_token_usage_count
 
     aigc_content_service = AigcContentService()
-    aigc_content_service.update_info(content_id=content_id, user_id=user_id, user_token_left=user_token_left,
-                                     api_key_token_left=api_key_token_left, **aigc_content.dict())
+    aigc_content_service.update_content_info(content_id=content_id, user_id=user_id, user_token_left=user_token_left,
+                                             api_key_token_left=api_key_token_left, **aigc_content.dict())
 
 
 # TODO 2023-6-27 10:16:15 sql事物控制
 def update_content_info(content_id: int, aigc_content: AigcContentRequest, access_token: str):
     """
-    更新content-token_left信息
+    更新内容信息
     :param content_id: 内容id
     :param aigc_content: AIGC内容对象
     :param access_token: 访问令牌
@@ -57,7 +57,7 @@ def update_content_info(content_id: int, aigc_content: AigcContentRequest, acces
     user_id = payload.get("user_id")
 
     aigc_content_service = AigcContentService()
-    aigc_content_service.update_info(content_id=content_id, user_id=user_id, **aigc_content.dict())
+    aigc_content_service.update_content_info(content_id=content_id, user_id=user_id, **aigc_content.dict())
 
 
 def get_src_content(content_id: int) -> Dict:

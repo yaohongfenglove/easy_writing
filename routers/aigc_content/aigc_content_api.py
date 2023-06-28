@@ -3,10 +3,13 @@
 import datetime
 
 from fastapi import Header
+from starlette import status as starlette_status
 
 from items.aigc_content import AigcContentRequest
 from items.response import GenericResponse
 from logic.aigc_content import aigc_content_logic
+from utils.constants import StatusCodeEnum
+from utils.exceptions import ApiKeyUpdateError, CustomHTTPException
 
 
 def update_aigc_content(
@@ -22,7 +25,14 @@ def update_aigc_content(
     :return: 任务id
     """
 
-    aigc_content_logic.update_content_info(content_id=content_id, aigc_content=aigc_content, access_token=access_token)
+    try:
+        aigc_content_logic.update_content_info(content_id=content_id, aigc_content=aigc_content, access_token=access_token)
+    except ApiKeyUpdateError:
+        raise CustomHTTPException(
+            status_code=starlette_status.HTTP_400_BAD_REQUEST,
+            code=StatusCodeEnum.API_KEY_UPDATE_ERROR.code,
+            msg=StatusCodeEnum.API_KEY_UPDATE_ERROR.errmsg,
+        )
 
     return GenericResponse(
         now=int(datetime.datetime.now().timestamp()),

@@ -11,7 +11,8 @@ class TaskCreateError(Exception):
         self.message = message
 
 
-class ContentTokenLeftUpdateError(Exception):
+class ApiKeyUpdateError(Exception):
+    """ api_key更新错误 """
     def __init__(self, message: str):
         self.message = message
 
