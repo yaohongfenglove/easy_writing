@@ -9,7 +9,7 @@ from items.aigc_content import AigcContentRequest
 from items.response import GenericResponse
 from logic.aigc_content import aigc_content_logic
 from utils.constants import StatusCodeEnum
-from utils.exceptions import ApiKeyUpdateError, CustomHTTPException
+from utils.exceptions import CustomHTTPException, AigcContentUpdateError
 
 
 def update_aigc_content(
@@ -27,11 +27,11 @@ def update_aigc_content(
 
     try:
         aigc_content_logic.update_content_info(content_id=content_id, aigc_content=aigc_content, access_token=access_token)
-    except ApiKeyUpdateError:
+    except AigcContentUpdateError:
         raise CustomHTTPException(
             status_code=starlette_status.HTTP_400_BAD_REQUEST,
-            code=StatusCodeEnum.API_KEY_UPDATE_ERROR.code,
-            msg=StatusCodeEnum.API_KEY_UPDATE_ERROR.errmsg,
+            code=StatusCodeEnum.AIGC_CONTENT_UPDATE_ERROR.code,
+            msg=StatusCodeEnum.AIGC_CONTENT_UPDATE_ERROR.errmsg,
         )
 
     return GenericResponse(
