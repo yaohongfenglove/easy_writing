@@ -12,7 +12,7 @@ class TaskCreateError(Exception):
 
 
 class AigcContentUpdateError(Exception):
-    """ api_key更新错误 """
+    """ aigc内容更新错误 """
     def __init__(self, message: str):
         self.message = message
 

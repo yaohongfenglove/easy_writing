@@ -90,14 +90,77 @@ def create_task(user_id: int, city_id: int,
                                        src_content_ids=src_content_ids, client_version=client_version)
     # 获取任务对应的详情列表
     task_info: List[Dict] = task_service.get_task_pro_info(task_id=task_id)
-
-    for item in task_info:
-        prompts = json.loads(item["prompt"])  # 读取每个任务内容的prompt
+    """
+    通过多次循环，替换input_variable中相对应的value值
+    
+    task_info类型
+    [{dict}，{dict}，{dict}]
+    for task in task_info:  # 循环读取任务列表中的任务
+    
+    prompts = json.loads(task["prompt"])  # 读取每个任务内容的prompt
+    prompts类型
+    [{dict},{dict},{dict}]
+    
+    for prompt in prompts:
+    input_variables = prompt.get("input_variables")  # 获取prompt中的输入变量
+    
+    input_variables类型
+    [{dict},{dict}]
+    for input_variable in input_variables:
+        if input_variable["name"] == "title":
+            input_variable["value"] = task["title"]
+        if input_variable["name"] == "contexts":
+            input_variable["value"] = task["content"]  # 取源内容中的相应的值给输入变量赋值
+    
+    
+    task_info
+    [
+        {
+            'content_id': 1, 
+            'status': 0, 
+            'create_time': '2023-06-29 16:53:20', 
+            'title': '*****', 
+            'content': '*********',
+            'prompt': '[
+                {
+                    "template": "********",
+                     "input_variables": [
+                        {
+                            "name": "",
+                            "value": "**********",
+                            "replaced_string": ""
+                        }, 
+                        {
+                        "name": "", 
+                        "value": "**********", 
+                        "replaced_string": ""
+                        }
+                     ]
+                }, 
+                {
+                    "template": "*******", 
+                    "input_variables": []
+                }, 
+                {
+                    "template": "******", 
+                    "input_variables": []
+                }
+            ]', 
+            'content_type_id': 1, 
+            'writing_type_id': 1
+        }
+    ]
+    """
+    for task in task_info:  # 循环读取任务列表中的任务
+        prompts = json.loads(task["prompt"])  # 读取每个任务内容的prompt
         for prompt in prompts:
             input_variables = prompt.get("input_variables")  # 获取prompt中的输入变量
             for input_variable in input_variables:
-                input_variable["value"] = item[input_variable["name"]]  # 取源内容中的相应的值给输入变量赋值
-        item["prompt"] = prompts  # 将新拼成的prompt赋值给prompt变量
+                if input_variable["name"] == "title":
+                    input_variable["value"] = task["title"]
+                if input_variable["name"] == "contexts":
+                    input_variable["value"] = task["content"]  # 取源内容中的相应的值给输入变量赋值
+        task["prompt"] = prompts  # 将新拼成的prompt赋值给prompt变量
 
     res = {
         "list": task_info,
