@@ -30,7 +30,7 @@ class AigcContentDAO(object):
         mysql_conn = self.get_mysql_conn()
         content_info = dict()
         try:
-            sql = ('SELECT content_id, title, summary, keywords, content, word_count, originality, status '
+            sql = ('SELECT content_id, title, summary, keywords, content, word_count, originality, status, error_msg '
                    'FROM aigc_content '
                    'WHERE content_id = %s;')
             args = (content_id,)
@@ -75,7 +75,7 @@ class AigcContentDAO(object):
 
     def update_content_info(self, content_id: int, user_id: int, status: int, content: str, token_usage_count: int,
                             title: str, summary: str, keywords: str, word_count: int, originality: float,
-                            api_key_id: int) -> int:
+                            api_key_id: int, error_msg: str) -> int:
         """
         更新内容信息
         :param content_id: 内容id
@@ -89,6 +89,7 @@ class AigcContentDAO(object):
         :param word_count: 字数
         :param originality: 原创度
         :param api_key_id: api_Key的id
+        :param error_msg: 失败原因
         :return:
         """
         mysql_conn = self.get_mysql_conn()
@@ -135,6 +136,10 @@ class AigcContentDAO(object):
             if originality is not None:
                 sql += 'originality = %s, '
                 args.append(originality)
+
+            if error_msg is not None:
+                sql += 'error_msg = %s, '
+                args.append(error_msg)
 
             sql = sql[:-2]  # 去除末尾的逗号和空格
 
