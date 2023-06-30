@@ -20,7 +20,8 @@ class AigcContentService(object):
         return content_info
 
     def update_content_info(self, content_id: int, user_id: int, status: int, content: str, token_usage_count: int,
-                            title: str, summary: str, keywords: str, word_count: int, originality: float, **kwargs):
+                            title: str, summary: str, keywords: str, word_count: int, originality: float,
+                            api_key_id: int, error_msg: str, **kwargs):
         """
         更新内容信息
         :param content_id: 内容id
@@ -33,10 +34,13 @@ class AigcContentService(object):
         :param keywords: 关键词
         :param word_count: 字数
         :param originality: 原创度
+        :param api_key_id: api_Key的id
+        :param error_msg: 失败原因
         :param kwargs: TODO 2023-6-27 10:51:25 AigcContentRequest类抽离api_key_id属性后，删去**kwargs
         :return:
         """
         self._task_dao.update_content_info(
             content_id=content_id, user_id=user_id, status=status, content=content, token_usage_count=token_usage_count,
             title=title, summary=summary, keywords=keywords, word_count=word_count, originality=originality,
+            api_key_id=api_key_id, error_msg=error_msg
         )

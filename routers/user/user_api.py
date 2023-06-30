@@ -1,7 +1,7 @@
 from datetime import datetime
 import datetime
 
-from fastapi import Header
+from fastapi import Header, Depends
 from fastapi.security import OAuth2PasswordBearer
 from starlette import status
 from starlette.background import BackgroundTasks
@@ -12,12 +12,13 @@ from items.response import GenericResponse
 from items.user import UserAccessToken
 from logic.user import user_logic
 from utils.constants import StatusCodeEnum
+from utils.dependencies import validate_phone
 from utils.exceptions import UserQueryError, VerificationCodeError, RequestIsTooFrequentError, CustomHTTPException
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 
-def get_verification_code(phone: str, background_tasks: BackgroundTasks):
+def get_verification_code(background_tasks: BackgroundTasks, phone: str = Depends(validate_phone)):
     """
     获取验证码
     :param phone: 手机号

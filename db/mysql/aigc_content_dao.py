@@ -1,12 +1,17 @@
+import traceback
 import warnings
 
-from conf.config import MYSQL_CONFIG
+from pymysql import DatabaseError
+
+from conf.config import MYSQL_CONFIG, logger
 from db.mysql.mysql_db import MysqlClient
 from items.aigc_content import AigcContentRequest
+from utils.exceptions import AigcContentUpdateError
 
 
 class AigcContentDAO(object):
     """ AIGC内容数据访问对象 """
+
     def __init__(self, *args, **kwargs):
         super(AigcContentDAO, self).__init__(*args, **kwargs)
 
@@ -25,7 +30,7 @@ class AigcContentDAO(object):
         mysql_conn = self.get_mysql_conn()
         content_info = dict()
         try:
-            sql = ('SELECT content_id, title, summary, keywords, content, word_count, originality, status '
+            sql = ('SELECT content_id, title, summary, keywords, content, word_count, originality, status, error_msg '
                    'FROM aigc_content '
                    'WHERE content_id = %s;')
             args = (content_id,)
@@ -69,7 +74,8 @@ class AigcContentDAO(object):
                 mysql_conn.close()
 
     def update_content_info(self, content_id: int, user_id: int, status: int, content: str, token_usage_count: int,
-                            title: str, summary: str, keywords: str, word_count: int, originality: float) -> int:
+                            title: str, summary: str, keywords: str, word_count: int, originality: float,
+                            api_key_id: int, error_msg: str) -> int:
         """
         更新内容信息
         :param content_id: 内容id
@@ -82,11 +88,16 @@ class AigcContentDAO(object):
         :param keywords: 关键词
         :param word_count: 字数
         :param originality: 原创度
+        :param api_key_id: api_Key的id
+        :param error_msg: 失败原因
         :return:
         """
         mysql_conn = self.get_mysql_conn()
 
         try:
+            mysql_conn.begin()
+
+            # 1.更新内容信息
             sql = 'UPDATE aigc_content SET '
             args = list()
 
@@ -126,15 +137,46 @@ class AigcContentDAO(object):
                 sql += 'originality = %s, '
                 args.append(originality)
 
+            if error_msg is not None:
+                sql += 'error_msg = %s, '
+                args.append(error_msg)
+
             sql = sql[:-2]  # 去除末尾的逗号和空格
 
             sql += ' WHERE content_id = %s;'
             args.append(content_id)
 
             count = mysql_conn.execute(sql, args)
-            mysql_conn.commit()
 
+            # 2. 更新用户的token剩余量
+            sql = ('UPDATE `user` '
+                   'SET token_left = token_left - %s '
+                   'WHERE user_id = %s; ')
+            args = (token_usage_count, user_id)
+
+            mysql_conn.execute(sql, args)
+
+            # 3.更新api_key的token剩余量
+            sql = ('UPDATE api_key '
+                   'SET token_left= token_left - %s '
+                   'WHERE api_key_id=%s; ')
+            args = (token_usage_count, api_key_id)
+
+            mysql_conn.execute(sql, args)
+
+            # 提交事务
+            mysql_conn.commit()
             return count
+        except DatabaseError:
+            mysql_conn.rollback()
+            error_str = traceback.format_exc()
+            logger.error(error_str)
+            raise AigcContentUpdateError("aigc内容更新失败")
+        except Exception:
+            mysql_conn.rollback()
+            error_str = traceback.format_exc()
+            logger.error(error_str)
+            raise AigcContentUpdateError("aigc内容更新失败")
         finally:
             if "mysql_conn" in dir():  # 判断连接是否成功创建，创建了才能执行close()
                 mysql_conn.close()
