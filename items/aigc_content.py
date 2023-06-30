@@ -23,6 +23,7 @@ class AigcContentRequest(BaseModel):
     keywords: Union[str, None] = None  # 关键词
     word_count: Union[int, None] = None  # 字数
     originality: Union[float, None] = None  # 原创度
+    error_msg: Union[str, None] = None  # 失败信息
 
 
 class AigcContentResponse(BaseModel):
