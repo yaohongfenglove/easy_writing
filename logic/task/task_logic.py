@@ -91,13 +91,27 @@ def create_task(user_id: int, city_id: int,
     # 获取任务对应的详情列表
     task_info: List[Dict] = task_service.get_task_pro_info(task_id=task_id)
 
-    for item in task_info:
-        prompts = json.loads(item["prompt"])  # 读取每个任务内容的prompt
+    '''
+    【代码块功能说明】
+        功能：通过多重for循环，将每个prompt模版中的变量的“实际值”赋给相应的变量
+    
+        for task in task_info:  # 循环读取任务列表中的每个任务
+        
+        for prompt in prompts:  # 循环读取多轮对话中每轮的prompt
+        
+        for input_variable in input_variables:  # 循环读取每个prompt要替换哪些变量，并将变量实际的值赋给value变量
+        
+    '''
+    for task in task_info:  # 循环读取任务列表中的任务
+        prompts = json.loads(task["prompt"])  # 读取每个任务内容的prompt
         for prompt in prompts:
             input_variables = prompt.get("input_variables")  # 获取prompt中的输入变量
             for input_variable in input_variables:
-                input_variable["value"] = item[input_variable["name"]]  # 取源内容中的相应的值给输入变量赋值
-        item["prompt"] = prompts  # 将新拼成的prompt赋值给prompt变量
+                if input_variable["name"] == "title":
+                    input_variable["value"] = task["title"]
+                if input_variable["name"] == "contexts":
+                    input_variable["value"] = task["content"]  # 取源内容中的相应的值给输入变量赋值
+        task["prompt"] = prompts  # 将新拼成的prompt赋值给prompt变量
 
     res = {
         "list": task_info,
