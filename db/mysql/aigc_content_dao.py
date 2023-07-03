@@ -127,7 +127,7 @@ class AigcContentDAO(object):
 
             if keywords is not None:
                 sql += 'keywords = %s, '
-                args.append(summary)
+                args.append(keywords)
 
             if word_count is not None:
                 sql += 'word_count = %s, '
