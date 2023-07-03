@@ -49,7 +49,7 @@ class SrcContentDAO(object):
             content_type_id: int,
             publish_start_time: str,
             publish_end_time: str
-    ) -> List[Dict]:
+    ):
         """
         获取源内容列表
         :param page_size: 每页多少条数据
@@ -83,11 +83,31 @@ class SrcContentDAO(object):
             args.append((page - 1)*page_size)
             args.append(page_size)
             _, content_list = mysql_conn.fetchall(sql, args=args)
+
+            # 查询总记录数
+            sql_count = ('SELECT COUNT(content_id) AS count '
+                         'FROM src_content '
+                         'WHERE city_id = %s;')
+            args_count = list()
+
+            args_count.append(city_id)
+
+            if content_type_id is not None:
+                sql_count = sql_count[:-1]  # 去除末尾的分号
+                sql_count += ' AND content_type_id = %s;'
+                args_count.append(content_type_id)
+
+            if publish_start_time is not None and publish_end_time is not None:
+                sql_count = sql_count[:-1]  # 去除末尾的分号
+                sql_count += ' AND publish_time BETWEEN %s AND %s;'
+                args_count.append(publish_start_time)
+                args_count.append(publish_end_time)
+            count = mysql_conn.fetchone(sql_count, args_count)
         finally:
             if "mysql_conn" in dir():  # 判断连接是否成功创建，创建了才能执行close()
                 mysql_conn.close()
 
-        return content_list
+        return content_list, count
 
 
 def main():
