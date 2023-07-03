@@ -18,7 +18,7 @@ class SrcContentService(object):
             content_type_id: int,
             publish_start_time: str,
             publish_end_time: str
-    ) -> List[Dict]:
+    ):
         """
         获取源内容列表
         :param page_size: 每页多少条数据
@@ -29,7 +29,7 @@ class SrcContentService(object):
         :param publish_start_time: 内容发布的起始时间
         :return:
         """
-        src_content_list = self._src_content_dao.get_src_content_list(
+        src_content_list, count = self._src_content_dao.get_src_content_list(
             city_id=city_id,
             page=page,
             page_size=page_size,
@@ -38,7 +38,7 @@ class SrcContentService(object):
             publish_end_time=publish_end_time
         )
 
-        return src_content_list
+        return src_content_list, count
 
     def get_src_content(self, content_id: int) -> Dict:
         """
