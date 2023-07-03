@@ -5,7 +5,6 @@ from pymysql import DatabaseError
 
 from conf.config import MYSQL_CONFIG, logger
 from db.mysql.mysql_db import MysqlClient
-from utils.decorators import datetime_to_strftime
 from utils.exceptions import TaskCreateError
 
 
@@ -20,7 +19,6 @@ class TaskDAO(object):
         mysql_conn = MysqlClient(MYSQL_CONFIG)
         return mysql_conn
 
-    @datetime_to_strftime
     def get_tasks(self, user_id: int, page: int, page_size: int) -> List[Dict]:
         """
         获取特定用户的任务列表
@@ -45,7 +43,6 @@ class TaskDAO(object):
 
         return tasks
 
-    @datetime_to_strftime
     def get_task_pro_info(self, task_id: int) -> List[Dict]:
         """
         获取任务详细信息
@@ -70,7 +67,6 @@ class TaskDAO(object):
 
         return task_info
 
-    @datetime_to_strftime
     def get_task_base_info(self, task_id: int) -> List[Dict]:
         """
         获取任务基础信息

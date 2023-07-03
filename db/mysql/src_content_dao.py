@@ -3,7 +3,6 @@ from typing import Dict, List
 
 from conf.config import MYSQL_CONFIG
 from db.mysql.mysql_db import MysqlClient
-from utils.decorators import datetime_to_strftime
 
 
 class SrcContentDAO(object):
@@ -18,7 +17,6 @@ class SrcContentDAO(object):
         mysql_conn = MysqlClient(MYSQL_CONFIG)
         return mysql_conn
 
-    @datetime_to_strftime
     def get_content_info(self, content_id: int) -> Dict:
         """
         获取内容信息
@@ -40,7 +38,6 @@ class SrcContentDAO(object):
 
         return content_info
 
-    @datetime_to_strftime
     def get_src_content_list(
             self,
             city_id: int,
@@ -63,7 +60,9 @@ class SrcContentDAO(object):
         mysql_conn = self.get_mysql_conn()
         content_list = list()
         try:
-            sql = ('SELECT content_id, content_type_id, title, publish_time, source_web, source_link '
+            # SQL_CALC_FOUND_ROWS 是一种在 SQL 查询中使用的特殊标记。它用于告诉 MySQL 在执行查询时要计算结果集的总量，而不是返回实际的结果集。
+            sql = ('SELECT SQL_CALC_FOUND_ROWS content_id, content_type_id, title, publish_time, source_web,'
+                   ' source_link '
                    'FROM src_content '
                    'WHERE city_id = %s;')
             args = list()
@@ -85,24 +84,10 @@ class SrcContentDAO(object):
             _, content_list = mysql_conn.fetchall(sql, args=args)
 
             # 查询总记录数
-            sql_count = ('SELECT COUNT(content_id) AS count '
-                         'FROM src_content '
-                         'WHERE city_id = %s;')
-            args_count = list()
-
-            args_count.append(city_id)
-
-            if content_type_id is not None:
-                sql_count = sql_count[:-1]  # 去除末尾的分号
-                sql_count += ' AND content_type_id = %s;'
-                args_count.append(content_type_id)
-
-            if publish_start_time is not None and publish_end_time is not None:
-                sql_count = sql_count[:-1]  # 去除末尾的分号
-                sql_count += ' AND publish_time BETWEEN %s AND %s;'
-                args_count.append(publish_start_time)
-                args_count.append(publish_end_time)
-            count = mysql_conn.fetchone(sql_count, args_count)
+            # 执行带有 SQL_CALC_FOUND_ROWS 的查询后，您可以使用 FOUND_ROWS() 函数来获取计算出的结果集的总量
+            sql_count = 'SELECT FOUND_ROWS() AS count;'
+            args_count = ()
+            count = mysql_conn.fetchone(sql_count, args_count).get("count")
         finally:
             if "mysql_conn" in dir():  # 判断连接是否成功创建，创建了才能执行close()
                 mysql_conn.close()

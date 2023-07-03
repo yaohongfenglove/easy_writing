@@ -3,7 +3,6 @@ from typing import Dict, List, Union
 
 from conf.config import MYSQL_CONFIG
 from db.mysql.mysql_db import MysqlClient
-from utils.decorators import datetime_to_strftime
 
 
 class UserDAO(object):
@@ -59,7 +58,6 @@ class UserDAO(object):
 
         return city_list
 
-    @datetime_to_strftime
     def get_user_api_key_list(self, user_id: int):
         """
         获取用户的api_key列表
