@@ -10,7 +10,7 @@ def get_src_content_list(
         page_size: int,
         publish_start_time: str,
         publish_end_time: str
-) -> List[Dict]:
+):
     """
     获取源内容列表
     :param page_size: 每页多少条数据
@@ -23,7 +23,7 @@ def get_src_content_list(
     """
     src_content_list_service = SrcContentService()
     page_size = min(page_size, 40)  # 每页几条记录做最大限制
-    src_content_list = src_content_list_service.get_src_content_list(
+    src_content_list, count = src_content_list_service.get_src_content_list(
         city_id=city_id,
         page=page,
         page_size=page_size,
@@ -32,7 +32,7 @@ def get_src_content_list(
         publish_end_time=publish_end_time
     )
 
-    return src_content_list
+    return src_content_list, count
 
 
 def get_src_content(content_id: int) -> Dict:

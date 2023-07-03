@@ -23,7 +23,7 @@ def get_src_content_list(
     :param publish_start_time: 内容发布的起始时间
     :return:
     """
-    src_content_list = src_content_logic.get_src_content_list(
+    src_content_list, count = src_content_logic.get_src_content_list(
         city_id=city_id,
         page=page,
         page_size=page_size,
@@ -35,7 +35,7 @@ def get_src_content_list(
         now=int(datetime.datetime.now().timestamp()),
         data={
             "list": src_content_list,
-            "count": len(src_content_list)
+            "count": count
         }
     )
 

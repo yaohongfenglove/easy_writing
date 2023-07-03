@@ -54,6 +54,8 @@ class MysqlClient(object):
         """
         self.__execute(sql, args)
         result = self._cursor.fetchone()
+        if result:
+            self.__dict_datetime_obj_to_str(result)
         return result
 
     def fetchall(self, sql, args=()):
@@ -64,8 +66,10 @@ class MysqlClient(object):
         :return: 结果数量和查询结果集
         """
         count = self.__execute(sql, args)
-        result = self._cursor.fetchall()
-        return count, result
+        results = self._cursor.fetchall()
+        for result in results:
+            self.__dict_datetime_obj_to_str(result)
+        return count, results
 
     def execute(self, sql, args=()):
         count = self.__execute(sql, args)

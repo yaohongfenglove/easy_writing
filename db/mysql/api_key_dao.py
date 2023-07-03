@@ -3,7 +3,6 @@ from typing import List, Dict, Union
 
 from conf.config import MYSQL_CONFIG
 from db.mysql.mysql_db import MysqlClient
-from utils.decorators import datetime_to_strftime
 
 
 class ApiKeyDAO(object):
@@ -18,7 +17,6 @@ class ApiKeyDAO(object):
         mysql_conn = MysqlClient(MYSQL_CONFIG)
         return mysql_conn
 
-    @datetime_to_strftime
     def get_api_key_list(self) -> List:
         """
         获取可用的api_key列表
