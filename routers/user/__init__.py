@@ -9,7 +9,7 @@ router = APIRouter()
 
 
 router.add_api_route(
-    '/info',
+    '/info/',
     user_api.get_user_info,
     methods=['get'],
     dependencies=[Depends(check_access_token)],
@@ -19,7 +19,7 @@ router.add_api_route(
 
 
 router.add_api_route(
-    '/verification_code',
+    '/verification_code/',
     user_api.get_verification_code,
     methods=['get'],
     summary='获取码验证',
@@ -28,7 +28,7 @@ router.add_api_route(
 
 
 router.add_api_route(
-    '/verification_code',
+    '/verification_code/',
     user_api.check_verification_code,
     methods=['post'],
     summary='校验验证码',
