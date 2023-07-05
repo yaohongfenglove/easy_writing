@@ -3,6 +3,7 @@ from typing import Dict, List
 
 from conf.config import MYSQL_CONFIG
 from db.mysql.mysql_db import MysqlClient
+from utils.constants import TASK_STATUS
 
 
 class SrcContentDAO(object):
@@ -80,12 +81,14 @@ class SrcContentDAO(object):
             if is_used == 0:
                 sql = sql[:-1]  # 去除末尾的分号
                 sql += (' AND content_id NOT IN (SELECT src_content_id FROM aigc_content '
-                        'WHERE `status` = 3 AND user_id = %s);')
+                        'WHERE `status` = %s AND user_id = %s);')
+                args.append(TASK_STATUS["success"])
                 args.append(user_id)
             elif is_used == 1:
                 sql = sql[:-1]  # 去除末尾的分号
                 sql += (' AND content_id IN (SELECT src_content_id FROM aigc_content '
-                        'WHERE `status` = 3 AND user_id = %s);')
+                        'WHERE `status` = %s AND user_id = %s);')
+                args.append(TASK_STATUS["success"])
                 args.append(user_id)
 
             if publish_start_time is not None and publish_end_time is not None:
@@ -118,7 +121,7 @@ def main():
         city_id=12,
         page=1,
         page_size=5,
-        is_use=2,
+        is_used=0,
         content_type_id=3,
         publish_start_time="2020-06-07 00:00:00",
         publish_end_time="2024-06-15 10:45:35"
