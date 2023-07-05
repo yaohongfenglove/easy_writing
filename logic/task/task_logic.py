@@ -107,7 +107,7 @@ def create_task(user_id: int, city_id: int,
         for prompt in prompts:
             input_variables = prompt.get("input_variables")  # 获取prompt中的输入变量
             for input_variable in input_variables:
-                if input_variable["name"] == "title":
+                if input_variable["name"] == "titles":
                     input_variable["value"] = task["title"]
                 if input_variable["name"] == "contexts":
                     input_variable["value"] = task["content"]  # 取源内容中的相应的值给输入变量赋值
