@@ -3,6 +3,7 @@ from typing import Dict, List
 
 from conf.config import MYSQL_CONFIG
 from db.mysql.mysql_db import MysqlClient
+from utils.constants import TASK_STATUS
 
 
 class SrcContentDAO(object):
@@ -40,19 +41,23 @@ class SrcContentDAO(object):
 
     def get_src_content_list(
             self,
+            user_id: int,
             city_id: int,
+            is_used: int,
+            content_type_id: int,
             page: int,
             page_size: int,
-            content_type_id: int,
             publish_start_time: str,
             publish_end_time: str
     ):
         """
         获取源内容列表
-        :param page_size: 每页多少条数据
-        :param page:  页码
+        :param user_id: 用户id
         :param city_id: 城市id
+        :param is_used: 是否使用过
         :param content_type_id: 内容类型id
+        :param page:  页码
+        :param page_size: 每页多少条数据
         :param publish_end_time: 内容发布的截止时间
         :param publish_start_time: 内容发布的起始时间
         :return:
@@ -72,6 +77,20 @@ class SrcContentDAO(object):
                 sql = sql[:-1]  # 去除末尾的分号
                 sql += ' AND content_type_id = %s;'
                 args.append(content_type_id)
+
+            if is_used == 0:
+                sql = sql[:-1]  # 去除末尾的分号
+                sql += (' AND content_id NOT IN (SELECT src_content_id FROM aigc_content '
+                        'WHERE `status` = %s AND user_id = %s);')
+                args.append(TASK_STATUS["success"])
+                args.append(user_id)
+            elif is_used == 1:
+                sql = sql[:-1]  # 去除末尾的分号
+                sql += (' AND content_id IN (SELECT src_content_id FROM aigc_content '
+                        'WHERE `status` = %s AND user_id = %s);')
+                args.append(TASK_STATUS["success"])
+                args.append(user_id)
+
             if publish_start_time is not None and publish_end_time is not None:
                 sql = sql[:-1]  # 去除末尾的分号
                 sql += ' AND publish_time BETWEEN %s AND %s;'
@@ -98,12 +117,14 @@ class SrcContentDAO(object):
 def main():
     src_content_dao = SrcContentDAO()
     res = src_content_dao.get_src_content_list(
-        city_id=3,
+        user_id=4,
+        city_id=12,
         page=1,
         page_size=5,
-        content_type_id=2,
-        publish_start_time="2023-06-07 00:00:00",
-        publish_end_time="2023-06-15 10:45:35"
+        is_used=0,
+        content_type_id=3,
+        publish_start_time="2020-06-07 00:00:00",
+        publish_end_time="2024-06-15 10:45:35"
     )
     print(f"{res}")
 
