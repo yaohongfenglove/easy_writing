@@ -23,7 +23,7 @@ class Verify(object):
         self.access_token = access_token
         super(Verify, self).__init__(*args, **kwargs)
 
-    def get_verification_code(self, background_tasks) -> str:
+    def get_verification_code(self, background_tasks: BackgroundTasks) -> str:
         """
         获取验证码
         :param background_tasks: 后台任务
@@ -38,16 +38,10 @@ class Verify(object):
             verification_code_send_frequency = config['tencent']['sms']['VERIFICATION_CODE_SEND_FREQUENCY']
             raise RequestIsTooFrequentError(f"发送太频繁了，请{verification_code_send_frequency}分钟重试")
         else:
-            background_tasks.add_task(self.redis_set_value, verification_code_send_flag_key, 1,
-                                      config['tencent']['sms']['VERIFICATION_CODE_SEND_FREQUENCY'] * 60)
+            # 生成验证码并发送
+            verification_code = self.generate_verification_code()
+            background_tasks.add_task(self.send_sms_verification_code, verification_code)
 
-        # 生成验证码
-        verification_code = self.generate_verification_code()
-        verification_code_key = f"verification_code:login:{self.phone}"
-        background_tasks.add_task(send_sms_verification_code, self.phone,
-                                  verification_code, config['tencent']['sms']['VERIFICATION_CODE_EXPIRE_MINUTES'])
-        background_tasks.add_task(self.redis_set_value, verification_code_key, verification_code,
-                                  config['tencent']['sms']['VERIFICATION_CODE_EXPIRE_MINUTES']*60)
         return verification_code
 
     def verify_verification_code(self):
@@ -110,6 +104,23 @@ class Verify(object):
 
         encoded_jwt = jwt.encode(access_token_info, config['access_token']['SECRET_KEY'], config['access_token']['ALGORITHM'])
         return encoded_jwt
+
+    def send_sms_verification_code(self, verification_code: str):
+        """
+        发送验证码
+        :param verification_code: 验证码
+        :return:
+        """
+        # 添加验证码已发送标志
+        verification_code_send_flag_key = f"verification_code:send_flag:{self.phone}"  # 验证码是否已发送标志
+        self.redis_set_value(verification_code_send_flag_key, 1, config['tencent']['sms']['VERIFICATION_CODE_SEND_FREQUENCY'] * 60)
+
+        # 发送验证码
+        send_sms_verification_code(self.phone, verification_code, config['tencent']['sms']['VERIFICATION_CODE_EXPIRE_MINUTES'])
+
+        # 添加验证码失效时间
+        verification_code_key = f"verification_code:login:{self.phone}"
+        self.redis_set_value(verification_code_key, verification_code, config['tencent']['sms']['VERIFICATION_CODE_EXPIRE_MINUTES'] * 60)
 
     @staticmethod
     def redis_set_value(key, value, expiration):
