@@ -23,10 +23,9 @@ class Verify(object):
         self.access_token = access_token
         super(Verify, self).__init__(*args, **kwargs)
 
-    def get_verification_code(self, background_tasks: BackgroundTasks) -> str:
+    def get_verification_code(self) -> str:
         """
         获取验证码
-        :param background_tasks: 后台任务
         :return:
         """
         redis_conn = redis_pool.get_conn()
@@ -40,7 +39,7 @@ class Verify(object):
         else:
             # 生成验证码并发送
             verification_code = self.generate_verification_code()
-            background_tasks.add_task(self.send_sms_verification_code, verification_code)
+            self.send_sms_verification_code(verification_code)
 
         return verification_code
 
@@ -129,11 +128,10 @@ class Verify(object):
         return None
 
 
-def get_verification_code(phone: str, background_tasks: BackgroundTasks):
+def get_verification_code(phone: str):
     """
     获取验证码
     :param phone: 手机号
-    :param background_tasks: 后台任务
     :return:
     """
     user_server = UserService(phone=phone)
@@ -142,7 +140,7 @@ def get_verification_code(phone: str, background_tasks: BackgroundTasks):
         raise UserQueryError("用户不存在")
 
     verify_obj = Verify(phone)
-    verify_obj.get_verification_code(background_tasks)
+    verify_obj.get_verification_code()
 
 
 def check_verification_code(phone: str, verification_code: str) -> Dict:

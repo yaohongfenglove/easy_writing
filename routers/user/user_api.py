@@ -18,15 +18,14 @@ from utils.exceptions import UserQueryError, VerificationCodeError, RequestIsToo
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 
-def get_verification_code(background_tasks: BackgroundTasks, phone: str = Depends(validate_phone)):
+def get_verification_code(phone: str = Depends(validate_phone)):
     """
     获取验证码
     :param phone: 手机号
-    :param background_tasks: 后台任务
     :return:
     """
     try:
-        user_logic.get_verification_code(phone=phone, background_tasks=background_tasks)
+        user_logic.get_verification_code(phone=phone)
         return GenericResponse(
             now=int(datetime.datetime.now().timestamp()),
             msg="验证码已发送"
